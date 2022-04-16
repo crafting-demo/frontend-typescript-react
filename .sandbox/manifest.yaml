@@ -1,0 +1,13 @@
+hooks:
+  post-checkout:
+    cmd: yarn install
+  build:
+    cmd: yarn build
+
+daemons:
+  app:
+    run:
+      cmd: yarn start
+      env:
+        - HOST=0.0.0.0
+        - PORT=3000
