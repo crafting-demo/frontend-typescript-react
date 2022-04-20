@@ -1,3 +1,4 @@
+import { camelizeKeys } from "humps";
 import { LoremIpsum } from "lorem-ipsum";
 import { v4 as uuidv4 } from "uuid";
 
@@ -49,6 +50,7 @@ export function RandomActionPayload(action: ActionType): Payload {
   }
 
   if (action === ActionType.Call) {
+    payload.ServiceName = Topic.GoGin; // Replace: RandomCallee()
     payload.Actions = RandomActions(RandomPick([1, 2, 3, 4, 5]));
   }
 
@@ -83,8 +85,6 @@ export function RandomInput(): Message {
 }
 
 export function RandomInputString(noSpace?: boolean): string {
-  if (noSpace) {
-    return JSON.stringify(RandomInput());
-  }
-  return JSON.stringify(RandomInput(), null, 2);
+  const obj = camelizeKeys(RandomInput());
+  return noSpace ? JSON.stringify(obj) : JSON.stringify(obj, null, 2);
 }
