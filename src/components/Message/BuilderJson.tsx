@@ -32,7 +32,13 @@ export function MessageBuilderJSON() {
     setErrors("");
   };
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    handleValidateInput();
+    if (errors !== "") {
+      return;
+    }
+    // handle submit via kafka client as producer
+  };
 
   return (
     <>
