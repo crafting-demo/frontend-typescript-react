@@ -62,13 +62,11 @@ export function MessageBuilderJSON() {
         helperText={errors}
       />
 
-      <ButtonGroup size="large" sx={{ marginTop: "20px" }}>
-        <Button onClick={handleGenerateRandomMessage}>
-          Generate Random Message
-        </Button>
+      <ButtonGroup size="small" sx={{ marginTop: "20px" }}>
+        <Button onClick={handleGenerateRandomMessage}>Auto-Generate</Button>
         <Button onClick={handleClearMessage}>Clear</Button>
         <Button onClick={handleValidateMessage}>Validate</Button>
-        <Button onClick={handleQueueMessage}>Send Request</Button>
+        <Button onClick={handleQueueMessage}>Publish</Button>
       </ButtonGroup>
     </>
   );

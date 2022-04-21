@@ -8,7 +8,7 @@ export const theme = createTheme({
       main: colors.black[200],
     },
     secondary: {
-      main: colors.green[100],
+      main: colors.red[200],
     },
   },
   components: {
