@@ -1,4 +1,3 @@
-import { camelizeKeys } from "humps";
 import { LoremIpsum } from "lorem-ipsum";
 import { v4 as uuidv4 } from "uuid";
 
@@ -13,12 +12,12 @@ import {
 
 export function RandomMessage(): Message {
   return {
-    Meta: {
-      Caller: Topic.TsReact,
-      Callee: Topic.GoGin, // Replace: RandomCallee()
-      CallTime: new Date().toISOString(),
+    meta: {
+      caller: Topic.TsReact,
+      callee: Topic.GoGin, // Replace: RandomCallee()
+      callTime: new Date().toISOString(),
     },
-    Actions: RandomActions(RandomPick()),
+    actions: RandomActions(RandomPick()),
   };
 }
 
@@ -39,8 +38,8 @@ export function RandomActions(size: number): Action[] {
 export function RandomAction(): Action {
   const action = RandomPick(Object.values(ActionType));
   return {
-    Action: action,
-    Payload: RandomActionPayload(action),
+    action,
+    payload: RandomActionPayload(action),
   };
 }
 
@@ -59,23 +58,23 @@ export function RandomActionPayload(action: ActionType): Payload {
   });
 
   if (action === ActionType.Echo) {
-    payload.Value = lorem.generateSentences(1);
+    payload.value = lorem.generateSentences(1);
   }
 
   if (action === ActionType.Read) {
-    payload.ServiceName = RandomPick(Object.values(Dependency));
-    payload.Key = uuidv4();
+    payload.serviceName = RandomPick(Object.values(Dependency));
+    payload.key = uuidv4();
   }
 
   if (action === ActionType.Write) {
-    payload.ServiceName = RandomPick(Object.values(Dependency));
-    payload.Key = uuidv4();
-    payload.Value = lorem.generateSentences(1);
+    payload.serviceName = RandomPick(Object.values(Dependency));
+    payload.key = uuidv4();
+    payload.value = lorem.generateSentences(1);
   }
 
   if (action === ActionType.Call) {
-    payload.ServiceName = Topic.GoGin; // Replace: RandomCallee()
-    payload.Actions = RandomActions(RandomPick());
+    payload.serviceName = Topic.GoGin; // Replace: RandomCallee()
+    payload.actions = RandomActions(RandomPick());
   }
 
   return payload;
@@ -90,7 +89,7 @@ export function RandomPick(sample?: any[]): any {
 }
 
 export function RandomMessageString(noSpace?: boolean): string {
-  const randomMsg = camelizeKeys(RandomMessage());
+  const randomMsg = RandomMessage();
   return noSpace
     ? JSON.stringify(randomMsg)
     : JSON.stringify(randomMsg, null, 2);

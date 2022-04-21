@@ -23,24 +23,24 @@ export enum Dependency {
 }
 
 export interface Message {
-  Meta: Meta;
-  Actions: Action[];
+  meta: Meta;
+  actions: Action[];
 }
 
 export interface Meta {
-  Caller: string;
-  Callee: string;
-  CallTime: string;
+  caller: string;
+  callee: string;
+  callTime: string;
 }
 
 export interface Action {
-  Action: string;
-  Payload: Payload;
+  action: string;
+  payload: Payload;
 }
 
 export interface Payload {
-  ServiceName?: string;
-  Actions?: Action[];
-  Key?: string;
-  Value?: string;
+  serviceName?: string;
+  actions?: Action[];
+  key?: string;
+  value?: string;
 }
