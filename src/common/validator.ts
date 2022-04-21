@@ -2,7 +2,7 @@ import { Action, Message, Meta, Payload } from "./types";
 
 export function ValidateMessage(message: string): string[] {
   try {
-    const msg: Message = JSON.parse(message);
+    const msg = JSON.parse(message) as Message;
     const errors = [];
 
     if (Object.keys(msg).length === 0) {

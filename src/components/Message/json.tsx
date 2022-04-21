@@ -34,14 +34,14 @@ export function MessageBuilderJSON() {
     setErrors("");
   };
 
-  const handleQueueMessage = () => {
+  const handleQueueMessage = async () => {
     handleValidateMessage();
     if (errors !== "") {
       return;
     }
 
     try {
-      // const msg: Message = JSON.parse(value);
+      // TODO
     } catch (e) {
       setErrors(`${e}`);
     }
