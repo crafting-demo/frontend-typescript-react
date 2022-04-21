@@ -29,13 +29,14 @@ export function MessageBuilderJSON() {
       setErrors(`${e}`);
       return;
     }
+    // add validation to check Message interface
     setErrors("");
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     handleValidateInput();
     if (errors !== "") {
-      return;
+      // return;
     }
     // handle submit via kafka client as producer
   };
