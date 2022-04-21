@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Button, ButtonGroup, TextField } from "@mui/material";
 
-import { RandomInputString } from "./RandomJson";
+import { RandomMessageString } from "./random";
 
 export function MessageBuilderJSON() {
   const [value, setValue] = useState("");
@@ -13,8 +13,8 @@ export function MessageBuilderJSON() {
     setErrors("");
   };
 
-  const handleGenerateRandomInput = () => {
-    setValue(RandomInputString());
+  const handleGenerateRandomMessage = () => {
+    setValue(RandomMessageString());
     setErrors("");
   };
 
@@ -48,8 +48,8 @@ export function MessageBuilderJSON() {
         multiline
         autoFocus
         fullWidth
-        minRows={25}
-        maxRows={25}
+        minRows={20}
+        maxRows={20}
         value={value}
         onChange={handleChange}
         variant="filled"
@@ -57,9 +57,9 @@ export function MessageBuilderJSON() {
         helperText={errors}
       />
 
-      <ButtonGroup size="large" sx={{ marginTop: "10px" }}>
-        <Button onClick={handleGenerateRandomInput}>
-          Generate Random Input
+      <ButtonGroup size="large" sx={{ marginTop: "20px" }}>
+        <Button onClick={handleGenerateRandomMessage}>
+          Generate Random Message
         </Button>
         <Button onClick={handleClearInput}>Clear</Button>
         <Button onClick={handleValidateInput}>Validate</Button>

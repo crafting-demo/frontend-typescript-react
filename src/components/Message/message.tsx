@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
 
-import { MessageBuilderInteractive } from "./BuilderInteractive";
-import { MessageBuilderJSON } from "./BuilderJson";
+import { MessageBuilderInteractive } from "./interactive";
+import { MessageBuilderJSON } from "./json";
 
 enum MessageBuilderType {
   Interactive = "interactive",
@@ -11,7 +11,7 @@ enum MessageBuilderType {
   YAML = "yaml",
 }
 
-export function MessageBuilder() {
+export function Message() {
   const [builderType, setBuilderType] = useState(
     MessageBuilderType.Interactive
   );
@@ -26,14 +26,7 @@ export function MessageBuilder() {
   };
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        maxWidth: "800px",
-        margin: "0 auto",
-        padding: "0 10px",
-      }}
-    >
+    <>
       <Box sx={{ paddingBottom: "20px" }}>
         <ToggleButtonGroup
           color="primary"
@@ -52,6 +45,6 @@ export function MessageBuilder() {
         <MessageBuilderInteractive />
       )}
       {builderType === MessageBuilderType.JSON && <MessageBuilderJSON />}
-    </Box>
+    </>
   );
 }

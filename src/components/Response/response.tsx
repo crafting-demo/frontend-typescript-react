@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-export function ResponseRenderer() {
+export function Response() {
   return (
     <Box>
       <div />
