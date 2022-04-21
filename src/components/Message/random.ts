@@ -82,10 +82,11 @@ export function RandomActionPayload(action: ActionType): Payload {
 }
 
 export function RandomPick(sample?: any[]): any {
-  if (!sample) {
-    sample = [1, 2, 3, 4, 5];
+  let arr = [1, 2, 3, 4, 5];
+  if (sample) {
+    arr = sample;
   }
-  return sample[Math.floor(Math.random() * sample.length)];
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 export function RandomMessageString(noSpace?: boolean): string {
