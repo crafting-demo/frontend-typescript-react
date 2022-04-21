@@ -28,8 +28,7 @@ export function MessageBuilderJSON() {
   const handleValidateMessage = () => {
     const err = ValidateMessage(value);
     if (err.length > 0) {
-      const e = `Errors: ${err.join(", ")}`;
-      setErrors(e);
+      setErrors(`Errors: ${err.join(", ")}`);
       return;
     }
     setErrors("");
