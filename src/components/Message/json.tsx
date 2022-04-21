@@ -2,13 +2,15 @@ import { useState } from "react";
 
 import { Button, ButtonGroup, TextField } from "@mui/material";
 
+import { ValidateMessage } from "common";
+
 import { RandomMessageString } from "./random";
 
 export function MessageBuilderJSON() {
   const [value, setValue] = useState("");
   const [errors, setErrors] = useState("");
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
     setErrors("");
   };
@@ -18,28 +20,32 @@ export function MessageBuilderJSON() {
     setErrors("");
   };
 
-  const handleClearInput = () => {
+  const handleClearMessage = () => {
     setValue("");
     setErrors("");
   };
 
-  const handleValidateInput = () => {
-    try {
-      JSON.parse(value);
-    } catch (e) {
-      setErrors(`${e}`);
+  const handleValidateMessage = () => {
+    const err = ValidateMessage(value);
+    if (err.length > 0) {
+      const e = `Errors: ${err.join(", ")}`;
+      setErrors(e);
       return;
     }
-    // add validation to check Message interface
     setErrors("");
   };
 
-  const handleSubmit = () => {
-    handleValidateInput();
+  const handleQueueMessage = () => {
+    handleValidateMessage();
     if (errors !== "") {
-      // return;
+      return;
     }
-    // handle submit via kafka client as producer
+
+    try {
+      // const msg: Message = JSON.parse(value);
+    } catch (e) {
+      setErrors(`${e}`);
+    }
   };
 
   return (
@@ -51,7 +57,7 @@ export function MessageBuilderJSON() {
         minRows={20}
         maxRows={20}
         value={value}
-        onChange={handleChange}
+        onChange={handleChangeMessage}
         variant="filled"
         error={errors !== ""}
         helperText={errors}
@@ -61,9 +67,9 @@ export function MessageBuilderJSON() {
         <Button onClick={handleGenerateRandomMessage}>
           Generate Random Message
         </Button>
-        <Button onClick={handleClearInput}>Clear</Button>
-        <Button onClick={handleValidateInput}>Validate</Button>
-        <Button onClick={handleSubmit}>Send Request</Button>
+        <Button onClick={handleClearMessage}>Clear</Button>
+        <Button onClick={handleValidateMessage}>Validate</Button>
+        <Button onClick={handleQueueMessage}>Send Request</Button>
       </ButtonGroup>
     </>
   );

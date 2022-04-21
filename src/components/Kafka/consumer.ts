@@ -38,8 +38,8 @@ export class ConsumerFactory {
           messages.push(JSON.stringify(message.value));
         },
       });
-    } catch (err) {
-      messages.push(`${err}`);
+    } catch (e) {
+      messages.push(`${e}`);
     }
 
     return messages;
@@ -66,8 +66,8 @@ export class ConsumerFactory {
           });
         },
       });
-    } catch (err) {
-      messages.push(`${err}`);
+    } catch (e) {
+      messages.push(`${e}`);
     }
 
     return messages;

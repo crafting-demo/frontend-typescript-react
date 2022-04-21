@@ -23,8 +23,8 @@ export class ProducerFactory {
   public async start(): Promise<string> {
     try {
       await this.producer.connect();
-    } catch (err) {
-      return `${err}`;
+    } catch (e) {
+      return `${e}`;
     }
     return "";
   }
