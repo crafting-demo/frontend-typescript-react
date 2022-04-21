@@ -1,6 +1,9 @@
 import React from "react";
 
+import { ThemeProvider } from "@mui/material";
 import ReactDOM from "react-dom/client";
+
+import { theme } from "styles/theme";
 
 import { App } from "./app";
 
@@ -9,6 +12,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>
 );

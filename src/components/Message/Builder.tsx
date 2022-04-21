@@ -31,10 +31,10 @@ export function MessageBuilder() {
         width: "100%",
         maxWidth: "800px",
         margin: "0 auto",
-        padding: "20px 10px",
+        padding: "0 10px",
       }}
     >
-      <Box sx={{ padding: "0 0 10px 0" }}>
+      <Box sx={{ paddingBottom: "20px" }}>
         <ToggleButtonGroup
           color="primary"
           value={builderType}

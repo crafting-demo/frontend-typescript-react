@@ -10,6 +10,7 @@ export function MessageBuilderJSON() {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
+    setErrors("");
   };
 
   const handleGenerateRandomInput = () => {
@@ -54,7 +55,6 @@ export function MessageBuilderJSON() {
         variant="filled"
         error={errors !== ""}
         helperText={errors}
-        inputProps={{ style: { fontFamily: "Fira Mono" } }}
       />
 
       <ButtonGroup size="large" sx={{ marginTop: "10px" }}>
