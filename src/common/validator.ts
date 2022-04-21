@@ -13,6 +13,7 @@ export function ValidateMessage(message: string): string[] {
     }
     if (!Object.keys(msg).includes("actions")) {
       errors.push("missing 'actions' field");
+      return errors;
     }
 
     const invalidMeta = ValidateMeta(msg.meta);

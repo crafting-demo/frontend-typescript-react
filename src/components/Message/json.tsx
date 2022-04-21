@@ -1,10 +1,8 @@
 import { useState } from "react";
 
-import { Button, ButtonGroup, TextField } from "@mui/material";
+import { Box, Button, ButtonGroup, TextField } from "@mui/material";
 
-import { ValidateMessage } from "common";
-
-import { RandomMessageString } from "./random";
+import { RandomMessageString, ValidateMessage } from "common";
 
 export function MessageBuilderJSON() {
   const [value, setValue] = useState("");
@@ -41,7 +39,7 @@ export function MessageBuilderJSON() {
     }
 
     try {
-      // TODO
+      // TODO: handle message enqueue
     } catch (e) {
       setErrors(`${e}`);
     }
@@ -62,12 +60,18 @@ export function MessageBuilderJSON() {
         helperText={errors}
       />
 
-      <ButtonGroup size="small" sx={{ marginTop: "20px" }}>
-        <Button onClick={handleGenerateRandomMessage}>Auto-Generate</Button>
+      <Box
+        sx={{
+          display: "flex",
+          alignContent: "bottom",
+          justifyContent: "right",
+        }}
+      >
+        <Button onClick={handleGenerateRandomMessage}>Auto Generate</Button>
         <Button onClick={handleClearMessage}>Clear</Button>
         <Button onClick={handleValidateMessage}>Validate</Button>
-        <Button onClick={handleQueueMessage}>Publish</Button>
-      </ButtonGroup>
+        <Button onClick={handleQueueMessage}>Send Request</Button>
+      </Box>
     </>
   );
 }

@@ -14,7 +14,7 @@ export function RandomMessage(): Message {
   return {
     meta: {
       caller: Topic.TsReact,
-      callee: Topic.GoGin, // Replace: RandomCallee()
+      callee: Topic.GoGin, // TODO: replace with RandomCallee()
       callTime: new Date().toISOString(),
     },
     actions: RandomActions(RandomPick()),
@@ -73,7 +73,7 @@ export function RandomActionPayload(action: ActionType): Payload {
   }
 
   if (action === ActionType.Call) {
-    payload.serviceName = Topic.GoGin; // Replace: RandomCallee()
+    payload.serviceName = Topic.GoGin; // TODO: replace with RandomCallee()
     payload.actions = RandomActions(RandomPick());
   }
 
@@ -81,16 +81,13 @@ export function RandomActionPayload(action: ActionType): Payload {
 }
 
 export function RandomPick(sample?: any[]): any {
-  let arr = [1, 2, 3, 4, 5];
-  if (sample) {
-    arr = sample;
-  }
-  return arr[Math.floor(Math.random() * arr.length)];
+  const a = sample || [1, 2, 3, 4, 5];
+  return a[Math.floor(Math.random() * a.length)];
 }
 
 export function RandomMessageString(noSpace?: boolean): string {
   const randomMsg = RandomMessage();
   return noSpace
     ? JSON.stringify(randomMsg)
-    : JSON.stringify(randomMsg, null, 2);
+    : JSON.stringify(randomMsg, null, 4);
 }
