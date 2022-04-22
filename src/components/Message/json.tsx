@@ -1,8 +1,9 @@
 import { useState } from "react";
 
-import { Box, Button, ButtonGroup, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 
-import { RandomMessageString, ValidateMessage } from "common";
+import { Message, RandomMessageString, ValidateMessage } from "common";
+import { Producer } from "common/kafka-client";
 
 export function MessageBuilderJSON() {
   const [value, setValue] = useState("");
@@ -39,7 +40,12 @@ export function MessageBuilderJSON() {
     }
 
     try {
-      // TODO: handle message enqueue
+      const msg = JSON.parse(value) as Message;
+
+      const producer = new Producer();
+      await producer.send(msg.meta.callee, value);
+
+      producer.shutdown();
     } catch (e) {
       setErrors(`${e}`);
     }
