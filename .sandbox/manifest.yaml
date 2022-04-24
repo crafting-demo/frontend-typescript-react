@@ -11,4 +11,4 @@ daemons:
       env:
         - HOST=0.0.0.0
         - PORT=3000
-        - REACT_APP_BROKER_SERVICE_ADDR=https://kafka$SANDBOX_ENDPOINT_DNS_SUFFIX
+        - REACT_APP_BROKER_SERVICE_ADDR=https://api$SANDBOX_ENDPOINT_DNS_SUFFIX
