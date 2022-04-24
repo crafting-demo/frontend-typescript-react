@@ -1,14 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Box, Button, TextField } from "@mui/material";
 
 import { Message, ValidateMessage } from "common";
-import { Producer } from "common/kafka-client";
 import { RandomMessageString } from "common/random";
 
 export function MessageBuilderJSON() {
   const [value, setValue] = useState("");
   const [errors, setErrors] = useState("");
+  const [send, setSend] = useState(false);
+
+  const url = `${process.env.REACT_APP_BROKER_SERVICE_ADDR}`.replace(
+    /^http/,
+    "ws"
+  );
 
   const handleChangeMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
@@ -34,23 +39,27 @@ export function MessageBuilderJSON() {
     setErrors("");
   };
 
-  const handleQueueMessage = async () => {
+  const handleSendMessage = async () => {
     handleValidateMessage();
-    if (errors !== "") {
+    if (!errors) {
+      setSend(true);
+    }
+  };
+
+  useEffect(() => {
+    if (!send) {
       return;
     }
 
-    try {
-      const msg = JSON.parse(value) as Message;
+    const msg = JSON.parse(value) as Message;
 
-      const producer = new Producer(msg.meta.callee);
-      await producer.send(value);
+    const socket = new WebSocket(`${url}/producer/${msg.meta.callee}`);
 
-      producer.shutdown();
-    } catch (e) {
-      setErrors(`${e}`);
-    }
-  };
+    socket.onopen = () => {
+      socket.send(JSON.stringify(msg));
+      setSend(false);
+    };
+  }, [send]);
 
   return (
     <>
@@ -77,7 +86,7 @@ export function MessageBuilderJSON() {
         <Button onClick={handleGenerateRandomMessage}>Auto Generate</Button>
         <Button onClick={handleClearMessage}>Clear</Button>
         <Button onClick={handleValidateMessage}>Validate</Button>
-        <Button onClick={handleQueueMessage}>Send Request</Button>
+        <Button onClick={handleSendMessage}>Send Message</Button>
       </Box>
     </>
   );
