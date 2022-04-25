@@ -3,35 +3,31 @@ import { useEffect, useState } from "react";
 import { Box, Button, TextField } from "@mui/material";
 
 import { Message, ValidateMessage } from "common";
+import { Producer } from "common/kafka-client";
 import { RandomMessageString } from "common/random";
 
 export function MessageBuilderJSON() {
-  const [value, setValue] = useState("");
-  const [errors, setErrors] = useState("");
+  const [message, setMessage] = useState(RandomMessageString());
   const [send, setSend] = useState(false);
-
-  const url = `${process.env.REACT_APP_BROKER_SERVICE_ADDR}`.replace(
-    /^http/,
-    "ws"
-  );
+  const [errors, setErrors] = useState("");
 
   const handleChangeMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
+    setMessage(event.target.value);
     setErrors("");
   };
 
   const handleGenerateRandomMessage = () => {
-    setValue(RandomMessageString());
+    setMessage(RandomMessageString());
     setErrors("");
   };
 
   const handleClearMessage = () => {
-    setValue("");
+    setMessage("");
     setErrors("");
   };
 
   const handleValidateMessage = () => {
-    const err = ValidateMessage(value);
+    const err = ValidateMessage(message);
     if (err.length > 0) {
       setErrors(`Errors: ${err.join(", ")}`);
       return;
@@ -50,15 +46,10 @@ export function MessageBuilderJSON() {
     if (!send) {
       return;
     }
-
-    const msg = JSON.parse(value) as Message;
-
-    const socket = new WebSocket(`${url}/producer/${msg.meta.callee}`);
-
-    socket.onopen = () => {
-      socket.send(JSON.stringify(msg));
-      setSend(false);
-    };
+    const msg = JSON.parse(message) as Message;
+    const producer = new Producer(msg.meta.callee);
+    producer.send(message);
+    setSend(false);
   }, [send]);
 
   return (
@@ -69,7 +60,7 @@ export function MessageBuilderJSON() {
         fullWidth
         minRows={20}
         maxRows={20}
-        value={value}
+        value={message}
         onChange={handleChangeMessage}
         variant="filled"
         error={errors !== ""}

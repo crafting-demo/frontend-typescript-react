@@ -1,4 +1,4 @@
-import { CssBaseline, Grid, Typography } from "@mui/material";
+import { CssBaseline, Typography } from "@mui/material";
 
 import { Message } from "components/Message";
 import { Response } from "components/Response";
@@ -12,15 +12,9 @@ export function App() {
         Crafting Demo - Multi-lang Multi-service app.
       </Typography>
 
-      <Grid container spacing={0}>
-        <Grid item md={12} lg={6}>
-          <Message />
-        </Grid>
+      <Message />
 
-        <Grid item md={12} lg={6}>
-          <Response />
-        </Grid>
-      </Grid>
+      <Response />
     </>
   );
 }

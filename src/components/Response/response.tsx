@@ -2,125 +2,35 @@ import { useEffect, useState } from "react";
 
 import { Box } from "@mui/material";
 
-import { Topic } from "common";
+import { Message, Topic } from "common";
+import { Consumer } from "common/kafka-client";
 
 export function Response() {
-  const [reactMessages, setReactMessages] = useState<string[]>([]);
-  const [goMessages, setGoMessages] = useState<string[]>([]);
-  const [expressMessages, setExpressMessages] = useState<string[]>([]);
-  const [railsMessages, setRailsMessages] = useState<string[]>([]);
-  const [kotlinMessages, setKotlinMessages] = useState<string[]>([]);
-  const [pythonMessages, setPythonMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [reactMessage, setReactMessage] = useState("");
 
-  const url = `${process.env.REACT_APP_BROKER_SERVICE_ADDR}`.replace(
-    /^http/,
-    "ws"
-  );
+  const handleChangeReactMessage = (message: string) => {
+    setReactMessage(message);
+  };
 
   useEffect(() => {
-    const socket = new WebSocket(`${url}/consumer/${Topic.React}`);
-
-    socket.onmessage = (event) => {
-      const msg = event.data as string;
-      setReactMessages([msg, ...reactMessages]);
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, [reactMessages]);
+    const consumerReact = new Consumer(Topic.React);
+    consumerReact.start(handleChangeReactMessage);
+  }, []);
 
   useEffect(() => {
-    const socket = new WebSocket(`${url}/consumer/${Topic.Go}`);
-
-    socket.onmessage = (event) => {
-      const msg = event.data as string;
-      setGoMessages([msg, ...goMessages]);
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, [goMessages]);
-
-  useEffect(() => {
-    const socket = new WebSocket(`${url}/consumer/${Topic.Express}`);
-
-    socket.onmessage = (event) => {
-      const msg = event.data as string;
-      setExpressMessages([msg, ...expressMessages]);
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, [expressMessages]);
-
-  useEffect(() => {
-    const socket = new WebSocket(`${url}/consumer/${Topic.Rails}`);
-
-    socket.onmessage = (event) => {
-      const msg = event.data as string;
-      setRailsMessages([msg, ...railsMessages]);
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, [railsMessages]);
-
-  useEffect(() => {
-    const socket = new WebSocket(`${url}/consumer/${Topic.Kotlin}`);
-
-    socket.onmessage = (event) => {
-      const msg = event.data as string;
-      setKotlinMessages([msg, ...kotlinMessages]);
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, [kotlinMessages]);
-
-  useEffect(() => {
-    const socket = new WebSocket(`${url}/consumer/${Topic.Python}`);
-
-    socket.onmessage = (event) => {
-      const msg = event.data as string;
-      setPythonMessages([msg, ...pythonMessages]);
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, [pythonMessages]);
+    if (!reactMessage) {
+      return;
+    }
+    const msg = JSON.parse(reactMessage) as Message;
+    setMessages(messages.concat(msg));
+  }, [reactMessage]);
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        padding: "50px 0",
-      }}
-    >
-      <Box>
-        {reactMessages.length && (
-          <>
-            {reactMessages.forEach((message) => (
-              <Box>{message}</Box>
-            ))}
-          </>
-        )}
-      </Box>
-
-      <Box>
-        {goMessages.length && (
-          <>
-            {goMessages.forEach((message) => (
-              <Box>{message}</Box>
-            ))}
-          </>
-        )}
-      </Box>
+    <Box>
+      {messages.map((message) => (
+        <Box key={message.meta.callTime}>{JSON.stringify(message)}</Box>
+      ))}
     </Box>
   );
 }
