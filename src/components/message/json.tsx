@@ -84,7 +84,7 @@ export function MessageBuilderJSON() {
 
       <InputFieldJSON
         value={message}
-        rows={lines + 5}
+        rows={lines + 1}
         onChange={handleChangeMessage}
       />
 

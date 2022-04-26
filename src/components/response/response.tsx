@@ -1,37 +1,50 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { Box } from "@mui/material";
+import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
 
-import { generateUniqueID } from "common/helpers";
-import { Consumer } from "common/kafka-client";
-import { Message, Topic } from "common/types";
+import { ResponseBuilderInteractive } from "./interactive";
+import { ResponseBuilderJSON } from "./json";
+
+enum ResponseBuilderType {
+  Interactive = "interactive",
+  JSON = "json",
+}
 
 export function Response() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [reactMessage, setReactMessage] = useState("");
+  const [builderType, setBuilderType] = useState(
+    ResponseBuilderType.Interactive
+  );
 
-  const handleChangeReactMessage = (message: string) => {
-    setReactMessage(message);
+  const handleChange = (
+    _event: React.MouseEvent<HTMLElement>,
+    newBuilderType: ResponseBuilderType
+  ) => {
+    if (Object.values(ResponseBuilderType).includes(newBuilderType)) {
+      setBuilderType(newBuilderType);
+    }
   };
 
-  useEffect(() => {
-    const consumerReact = new Consumer(Topic.React);
-    consumerReact.start(handleChangeReactMessage);
-  }, []);
-
-  useEffect(() => {
-    if (!reactMessage) {
-      return;
-    }
-    const msg = JSON.parse(reactMessage) as Message;
-    setMessages(messages.concat(msg));
-  }, [reactMessage]);
-
   return (
-    <Box>
-      {messages.map((message) => (
-        <Box key={generateUniqueID()}>{JSON.stringify(message)}</Box>
-      ))}
-    </Box>
+    <>
+      <Box sx={{ marginBottom: "20px" }}>
+        <ToggleButtonGroup
+          color="primary"
+          size="small"
+          value={builderType}
+          exclusive
+          onChange={handleChange}
+        >
+          <ToggleButton value={ResponseBuilderType.Interactive}>
+            Interactive
+          </ToggleButton>
+          <ToggleButton value={ResponseBuilderType.JSON}>JSON</ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+
+      {builderType === ResponseBuilderType.Interactive && (
+        <ResponseBuilderInteractive />
+      )}
+      {builderType === ResponseBuilderType.JSON && <ResponseBuilderJSON />}
+    </>
   );
 }

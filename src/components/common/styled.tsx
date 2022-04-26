@@ -42,4 +42,34 @@ export const InputFieldJSON = styled("textarea")(() => ({
   paddingLeft: "5px",
   borderLeft: `1px dashed ${colors.purple[100]}`,
   borderRadius: "none",
+  whiteSpace: "pre",
+  overflowWrap: "normal",
+  overflowX: "hidden",
+}));
+
+export const InteractiveResponseWrapper = styled(Box)(() => ({
+  width: "100%",
+  height: "auto",
+  minHeight: "800px",
+  padding: "50px 0",
+  position: "relative",
+}));
+
+export const InteractiveResponseLine = styled(Box)(() => ({
+  width: "120%",
+  borderTop: `1px solid ${colors.white[400]}`,
+  position: "absolute",
+  zIndex: "100",
+}));
+
+export const InteractiveResponseBadge = styled(Box)(() => ({
+  position: "absolute",
+  zIndex: "200",
+  color: colors.white[100],
+  padding: "0 10px",
+  width: "30px",
+  height: "30px",
+  lineHeight: "30px",
+  textAlign: "center",
+  borderRadius: "50%",
 }));
