@@ -1,6 +1,11 @@
-import { Message } from "common/types";
+import { useEffect, useState } from "react";
+
+import { generateUniqueID } from "common/helpers";
+import { Consumer } from "common/kafka-client";
+import { Message, Topic } from "common/types";
 import {
   InteractiveResponseBadge,
+  InteractiveResponseBlock,
   InteractiveResponseLine,
   InteractiveResponseWrapper,
 } from "components/common";
@@ -8,20 +13,81 @@ import { colors } from "styles/palette";
 
 export interface MessageBlock {
   message: Message;
-  type: string; // request | response
+  from: number;
+  to: number;
   horizontalOffset: number;
   verticalOffset: number;
 }
 
 export function ResponseBuilderInteractive() {
+  const [reactBlocks, setReactBlocks] = useState<MessageBlock[]>([]);
+  const [reactMessage, setReactMessage] = useState("");
+
+  const handleChangeReactMessage = (message: string) => {
+    setReactMessage(message);
+  };
+
+  useEffect(() => {
+    const consumerReact = new Consumer(Topic.React);
+    consumerReact.start(handleChangeReactMessage);
+  }, []);
+
+  useEffect(() => {
+    if (!reactMessage) {
+      return;
+    }
+    const msg = JSON.parse(reactMessage) as Message;
+    let vertical = 0;
+    switch (msg.meta.callee) {
+      case Topic.React:
+        vertical = 85;
+        break;
+      case Topic.Go:
+        vertical = 185;
+        break;
+      case Topic.Express:
+        vertical = 285;
+        break;
+      case Topic.Rails:
+        vertical = 385;
+        break;
+      case Topic.Kotlin:
+        vertical = 485;
+        break;
+      case Topic.Python:
+        vertical = 585;
+        break;
+      default:
+        break;
+    }
+    const block: MessageBlock = {
+      message: msg,
+      from: 0,
+      to: 0,
+      horizontalOffset: 50 * (reactBlocks.length + 1),
+      verticalOffset: vertical,
+    };
+    setReactBlocks(reactBlocks.concat(block));
+  }, [reactMessage]);
+
   return (
     <InteractiveResponseWrapper>
+      <div>Blocks count: {reactBlocks.length}</div>
       <InteractiveResponseBadge
         sx={{ marginTop: "85px", backgroundColor: colors.purple[100] }}
       >
         1
       </InteractiveResponseBadge>
       <InteractiveResponseLine sx={{ marginTop: "100px" }} />
+      {reactBlocks.map((block) => (
+        <InteractiveResponseBlock
+          horizontaloffset={block.horizontalOffset}
+          verticaloffset={block.verticalOffset}
+          key={generateUniqueID()}
+        >
+          {block.message.meta.callee}
+        </InteractiveResponseBlock>
+      ))}
 
       <InteractiveResponseBadge
         sx={{ marginTop: "185px", backgroundColor: colors.purple[100] }}

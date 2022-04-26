@@ -1,4 +1,4 @@
-import { Box, BoxProps, styled } from "@mui/material";
+import { Box, BoxProps, Button, ButtonProps, styled } from "@mui/material";
 
 import { colors } from "styles";
 
@@ -56,20 +56,33 @@ export const InteractiveResponseWrapper = styled(Box)(() => ({
 }));
 
 export const InteractiveResponseLine = styled(Box)(() => ({
-  width: "120%",
-  borderTop: `1px solid ${colors.white[400]}`,
   position: "absolute",
   zIndex: "100",
+  width: "120%",
+  borderTop: `1px solid ${colors.white[400]}`,
 }));
 
 export const InteractiveResponseBadge = styled(Box)(() => ({
   position: "absolute",
   zIndex: "200",
-  color: colors.white[100],
-  padding: "0 10px",
   width: "30px",
   height: "30px",
   lineHeight: "30px",
   textAlign: "center",
   borderRadius: "50%",
+  color: colors.white[100],
+}));
+
+export const InteractiveResponseBlock = styled(Button)<
+  ButtonProps & { horizontaloffset: number; verticaloffset: number }
+>(({ horizontaloffset, verticaloffset }) => ({
+  position: "absolute",
+  zIndex: "300",
+  width: "60px",
+  height: "30px",
+  lineHeight: "30px",
+  textAlign: "center",
+  marginLeft: `${horizontaloffset}px`,
+  marginTop: `${verticaloffset}px`,
+  transition: "margin 1000ms ease-in-out",
 }));
