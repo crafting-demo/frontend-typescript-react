@@ -1,4 +1,4 @@
-import { Action, Message, Meta, Payload } from "./message";
+import { Action, Message, Meta, Payload } from "common/types";
 
 export function ValidateMessage(message: string): string[] {
   try {

@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 
 import { Box } from "@mui/material";
 
-import { Message, Topic } from "common";
+import { generateUniqueID } from "common/helpers";
 import { Consumer } from "common/kafka-client";
+import { Message, Topic } from "common/types";
 
 export function Response() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -29,7 +30,7 @@ export function Response() {
   return (
     <Box>
       {messages.map((message) => (
-        <Box key={message.meta.callTime}>{JSON.stringify(message)}</Box>
+        <Box key={generateUniqueID()}>{JSON.stringify(message)}</Box>
       ))}
     </Box>
   );

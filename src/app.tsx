@@ -1,20 +1,41 @@
-import { CssBaseline, Typography } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 
-import { Message } from "components/Message";
-import { Response } from "components/Response";
+import { useMobile } from "common/hooks";
+import { AppContainer, AppSectionWrapper } from "components/common";
+import { Message } from "components/message";
+import { Response } from "components/response";
+import { colors } from "styles";
 
 export function App() {
+  const mobile = useMobile();
+
   return (
     <>
       <CssBaseline />
 
-      <Typography variant="h1" sx={{ fontSize: "30px", padding: "20px 10px" }}>
-        Crafting Demo - Multi-lang Multi-service app.
-      </Typography>
+      <AppContainer mobile={+mobile}>
+        <AppSectionWrapper
+          mobile={+mobile}
+          sx={{
+            width: "500px",
+            backgroundColor: colors.white[100],
+            overflowY: "auto",
+          }}
+        >
+          <Message />
+        </AppSectionWrapper>
 
-      <Message />
-
-      <Response />
+        <AppSectionWrapper
+          mobile={+mobile}
+          sx={{
+            width: "calc(100vw - 500px)",
+            overflowX: "hidden",
+            backgroundColor: colors.white[200],
+          }}
+        >
+          <Response />
+        </AppSectionWrapper>
+      </AppContainer>
     </>
   );
 }

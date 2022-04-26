@@ -5,10 +5,10 @@ import { colors } from "styles/palette";
 export const theme = createTheme({
   palette: {
     primary: {
-      main: colors.red[200],
+      main: colors.purple[100],
     },
     secondary: {
-      main: colors.green[200],
+      main: colors.teal[100],
     },
   },
   components: {

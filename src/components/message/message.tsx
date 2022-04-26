@@ -8,7 +8,6 @@ import { MessageBuilderJSON } from "./json";
 enum MessageBuilderType {
   Interactive = "interactive",
   JSON = "json",
-  YAML = "yaml",
 }
 
 export function Message() {
@@ -25,9 +24,10 @@ export function Message() {
 
   return (
     <>
-      <Box sx={{ padding: "0 10px 20px 10px" }}>
+      <Box sx={{ marginBottom: "20px" }}>
         <ToggleButtonGroup
           color="primary"
+          size="small"
           value={builderType}
           exclusive
           onChange={handleChange}

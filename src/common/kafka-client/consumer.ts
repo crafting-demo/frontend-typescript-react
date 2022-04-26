@@ -14,7 +14,7 @@ export class Consumer {
     this.broker = url;
 
     this.consumer = new WebSocket(
-      `${this.broker}/consumer/${this.topic}/newest`
+      `${this.broker}/consumer/${this.topic}/latest`
     );
   }
 
@@ -22,6 +22,16 @@ export class Consumer {
     this.consumer.onmessage = (event) => {
       updateMessagesCallback(event.data as string);
     };
+  }
+
+  public ready() {
+    return this.consumer.readyState === this.consumer.OPEN;
+  }
+
+  public reconnect() {
+    this.consumer = new WebSocket(
+      `${this.broker}/consumer/${this.topic}/latest`
+    );
   }
 
   public shutdown() {

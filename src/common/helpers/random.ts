@@ -89,5 +89,5 @@ export function RandomMessageString(noSpace?: boolean): string {
   const randomMsg = RandomMessage();
   return noSpace
     ? JSON.stringify(randomMsg)
-    : JSON.stringify(randomMsg, null, 4);
+    : JSON.stringify(randomMsg, null, 2);
 }
