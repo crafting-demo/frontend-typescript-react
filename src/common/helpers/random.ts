@@ -14,7 +14,7 @@ export function RandomMessage(): Message {
   return {
     meta: {
       caller: Topic.React,
-      callee: Topic.Go, // TODO: replace with RandomCallee()
+      callee: RandomCallee(),
       callTime: new Date().toUTCString(),
     },
     actions: RandomActions(RandomPick()),
@@ -73,7 +73,7 @@ export function RandomActionPayload(action: ActionType): Payload {
   }
 
   if (action === ActionType.Call) {
-    payload.serviceName = Topic.Go; // TODO: replace with RandomCallee()
+    payload.serviceName = RandomCallee();
     payload.actions = RandomActions(RandomPick());
   }
 
