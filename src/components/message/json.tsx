@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Alert, Button, Snackbar } from "@mui/material";
 
 import { RandomMessageString, ValidateMessage } from "common/helpers";
+import { useMobile } from "common/hooks";
 import { Producer } from "common/kafka-client";
 import { Message } from "common/types";
 import { InputBtnGroupJSON, InputFieldJSON } from "components/common";
 
 export function MessageBuilderJSON() {
+  const mobile = useMobile();
+
   const [message, setMessage] = useState(RandomMessageString());
-  const [lines, setLines] = useState(message.split("\n").length);
   const [errors, setErrors] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -69,24 +71,20 @@ export function MessageBuilderJSON() {
     producer.send(message);
   };
 
-  useEffect(() => {
-    setLines(message.split("\n").length);
-  }, [message]);
-
   return (
     <>
+      <InputFieldJSON
+        value={message}
+        rows={mobile ? 30 : 40}
+        onChange={handleChangeMessage}
+      />
+
       <InputBtnGroupJSON>
         <Button onClick={handleGenerateMessage}>Generate</Button>
         <Button onClick={handleClearMessage}>Clear</Button>
         <Button onClick={handleValidateMessage}>Validate</Button>
         <Button onClick={handleSendMessage}>Send</Button>
       </InputBtnGroupJSON>
-
-      <InputFieldJSON
-        value={message}
-        rows={lines + 1}
-        onChange={handleChangeMessage}
-      />
 
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={errors ? "error" : "success"}>

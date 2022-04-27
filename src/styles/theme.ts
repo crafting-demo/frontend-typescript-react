@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 
+import type {} from "@mui/lab/themeAugmentation";
 import { colors } from "styles/palette";
 
 export const theme = createTheme({
@@ -16,6 +17,13 @@ export const theme = createTheme({
       styleOverrides: {
         body: {
           backgroundColor: colors.white[100],
+        },
+      },
+    },
+    MuiTimeline: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "transparent",
         },
       },
     },

@@ -1,4 +1,4 @@
-import { Box, BoxProps, Button, ButtonProps, styled } from "@mui/material";
+import { Box, BoxProps, styled } from "@mui/material";
 
 import { colors } from "styles";
 
@@ -17,21 +17,25 @@ export const AppSectionWrapper = styled(Box)<BoxProps & { mobile?: number }>(
   ({ mobile }) =>
     mobile
       ? {
-          width: "100% !important",
+          width: "100%",
           minHeight: "50vh",
           padding: "20px",
+          overflowY: "auto",
         }
       : {
+          width: "50%",
           height: "100vh",
           padding: "20px",
+          overflowY: "auto",
         }
 );
 
 export const InputBtnGroupJSON = styled(Box)(() => ({
   display: "flex",
-  alignContent: "bottom",
   flexWrap: "wrap",
-  borderLeft: `1px dashed ${colors.purple[100]}`,
+  alignContent: "bottom",
+  marginTop: "20px",
+  justifyContent: "right",
 }));
 
 export const InputFieldJSON = styled("textarea")(() => ({
@@ -39,50 +43,31 @@ export const InputFieldJSON = styled("textarea")(() => ({
   resize: "none",
   border: "0px",
   outline: "none",
-  paddingLeft: "5px",
-  borderLeft: `1px dashed ${colors.purple[100]}`,
   borderRadius: "none",
-  whiteSpace: "pre",
-  overflowWrap: "normal",
-  overflowX: "hidden",
+  backgroundColor: "transparent",
+  overflowY: "scroll",
+  "::-webkit-scrollbar": {
+    width: "4px",
+  },
+  "::-webkit-scrollbar-track": {
+    backgroundColor: "#F1F1F1",
+    borderRadius: "16px",
+  },
+  "::-webkit-scrollbar-thumb": {
+    background: "#CCCCCC",
+    borderRadius: "16px",
+  },
+  "::-webkit-scrollbar-thumb:hover": {
+    backgroundColor: "#BDBDBD",
+  },
 }));
 
-export const InteractiveResponseWrapper = styled(Box)(() => ({
+export const FullScreenModal = styled(Box)(() => ({
   width: "100%",
-  height: "auto",
-  minHeight: "800px",
-  padding: "50px 0",
-  position: "relative",
-}));
-
-export const InteractiveResponseLine = styled(Box)(() => ({
+  height: "100%",
   position: "absolute",
-  zIndex: "100",
-  width: "120%",
-  borderTop: `1px solid ${colors.white[400]}`,
-}));
-
-export const InteractiveResponseBadge = styled(Box)(() => ({
-  position: "absolute",
-  zIndex: "200",
-  width: "30px",
-  height: "30px",
-  lineHeight: "30px",
-  textAlign: "center",
-  borderRadius: "50%",
-  color: colors.white[100],
-}));
-
-export const InteractiveResponseBlock = styled(Button)<
-  ButtonProps & { horizontaloffset: number; verticaloffset: number }
->(({ horizontaloffset, verticaloffset }) => ({
-  position: "absolute",
-  zIndex: "300",
-  width: "60px",
-  height: "30px",
-  lineHeight: "30px",
-  textAlign: "center",
-  marginLeft: `${horizontaloffset}px`,
-  marginTop: `${verticaloffset}px`,
-  transition: "margin 1000ms ease-in-out",
+  opacity: "0.9",
+  top: "0",
+  left: "0",
+  backgroundColor: colors.white[100],
 }));

@@ -15,7 +15,7 @@ export function RandomMessage(): Message {
     meta: {
       caller: Topic.React,
       callee: Topic.Go, // TODO: replace with RandomCallee()
-      callTime: new Date().toISOString(),
+      callTime: new Date().toUTCString(),
     },
     actions: RandomActions(RandomPick()),
   };
