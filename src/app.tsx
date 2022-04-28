@@ -1,26 +1,39 @@
+import { useState } from "react";
+
 import { CssBaseline } from "@mui/material";
 
 import { useMobile } from "common/hooks";
+import { Message } from "common/types";
 import { AppContainer, AppSectionWrapper } from "components/common";
-import { Message } from "components/message";
-import { Response } from "components/response";
+import { MessageBuilder } from "components/message";
+import { ResponseBuilder } from "components/response";
 
 export function App() {
-  const mobile = useMobile();
-
   return (
     <>
       <CssBaseline />
-
-      <AppContainer mobile={+mobile}>
-        <AppSectionWrapper mobile={+mobile}>
-          <Message />
-        </AppSectionWrapper>
-
-        <AppSectionWrapper mobile={+mobile}>
-          <Response />
-        </AppSectionWrapper>
-      </AppContainer>
+      <Page />
     </>
+  );
+}
+
+function Page() {
+  const mobile = useMobile();
+  const [response, setResponse] = useState<Message>();
+
+  const handleChangeResponse = (message: Message) => {
+    setResponse(message);
+  };
+
+  return (
+    <AppContainer mobile={+mobile}>
+      <AppSectionWrapper mobile={+mobile}>
+        <MessageBuilder onCallback={handleChangeResponse} />
+      </AppSectionWrapper>
+
+      <AppSectionWrapper mobile={+mobile}>
+        <ResponseBuilder response={response} />
+      </AppSectionWrapper>
+    </AppContainer>
   );
 }

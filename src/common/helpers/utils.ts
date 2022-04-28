@@ -1,18 +1,18 @@
-import { Topic } from "common/types";
+import { ServiceType } from "common/types";
 
 export const PickColorByTopic = (topic: string) => {
   switch (topic) {
-    case Topic.React:
+    case ServiceType.React:
       return "primary";
-    case Topic.Go:
+    case ServiceType.Gin:
       return "info";
-    case Topic.Express:
+    case ServiceType.Express:
       return "warning";
-    case Topic.Rails:
+    case ServiceType.Rails:
       return "error";
-    case Topic.Kotlin:
+    case ServiceType.Spring:
       return "secondary";
-    case Topic.Python:
+    case ServiceType.Django:
       return "success";
     default:
       return "grey";

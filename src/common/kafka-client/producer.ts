@@ -8,10 +8,8 @@ export class Producer {
   constructor(topic: string, broker?: string) {
     this.topic = topic;
 
-    const url =
-      broker ||
-      `${process.env.REACT_APP_BROKER_SERVICE_ADDR}`.replace(/^http/, "ws");
-    this.broker = url;
+    const suffix = `${process.env.REACT_APP_DNS_SUFFIX}`;
+    this.broker = broker || `wss://kafka${suffix}`;
 
     this.producer = new WebSocket(`${this.broker}/producer/${this.topic}`);
   }

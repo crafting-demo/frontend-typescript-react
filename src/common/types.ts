@@ -3,18 +3,24 @@ export enum ActionType {
   Read = "Read",
   Write = "Write",
   Call = "Call",
+  Enqueue = "Enqueue",
 }
 
-export enum Topic {
-  React = "frontend-react",
-  Go = "backend-go",
-  Express = "backend-express",
-  Rails = "backend-rails",
-  Kotlin = "backend-kotlin",
-  Python = "backend-python",
+export enum StatusType {
+  Passed = "passed",
+  Failed = "failed",
 }
 
-export enum Dependency {
+export enum ServiceType {
+  React = "frontend-typescript-react",
+  Gin = "backend-go-gin",
+  Express = "backend-typescript-express",
+  Rails = "backend-ruby-rails",
+  Spring = "backend-kotlin-spring",
+  Django = "backend-python-django",
+}
+
+export enum DependencyType {
   MySQL = "mysql",
   Postgres = "postgres",
   MongoDB = "mongodb",
@@ -34,6 +40,9 @@ export interface Meta {
 }
 
 export interface Action {
+  serviceName?: string;
+  returnTime?: string;
+  status?: string;
   action: string;
   payload: Payload;
 }

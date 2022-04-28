@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
 
+import { Message } from "common/types";
+
 import { MessageBuilderInteractive } from "./interactive";
 import { MessageBuilderJSON } from "./json";
 
@@ -10,7 +12,12 @@ enum MessageBuilderType {
   JSON = "json",
 }
 
-export function Message() {
+interface MessageBuilderParams {
+  onCallback: (message: Message) => void;
+}
+
+export function MessageBuilder(params: MessageBuilderParams) {
+  const { onCallback } = params;
   const [builderType, setBuilderType] = useState(MessageBuilderType.JSON);
 
   const handleChange = (
@@ -42,7 +49,9 @@ export function Message() {
       {builderType === MessageBuilderType.Interactive && (
         <MessageBuilderInteractive />
       )}
-      {builderType === MessageBuilderType.JSON && <MessageBuilderJSON />}
+      {builderType === MessageBuilderType.JSON && (
+        <MessageBuilderJSON onCallback={onCallback} />
+      )}
     </>
   );
 }

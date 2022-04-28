@@ -2,13 +2,18 @@ import { useState } from "react";
 
 import { Alert, Button, Snackbar } from "@mui/material";
 
+import { Client } from "common/backend-client";
 import { RandomMessageString, ValidateMessage } from "common/helpers";
 import { useMobile } from "common/hooks";
-import { Producer } from "common/kafka-client";
 import { Message } from "common/types";
 import { InputBtnGroupJSON, InputFieldJSON } from "components/common";
 
-export function MessageBuilderJSON() {
+interface MessageBuilderJSONParams {
+  onCallback: (message: Message) => void;
+}
+
+export function MessageBuilderJSON(params: MessageBuilderJSONParams) {
+  const { onCallback } = params;
   const mobile = useMobile();
 
   const [message, setMessage] = useState(RandomMessageString());
@@ -60,15 +65,18 @@ export function MessageBuilderJSON() {
     handleOpen();
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     const err = handleSetErrors();
     if (err) {
       handleOpen();
       return;
     }
     const msg = JSON.parse(message) as Message;
-    const producer = new Producer(msg.meta.callee);
-    producer.send(message);
+    const client = new Client(msg.meta.callee);
+    const resp = await client.makeNestedCall(msg);
+    if (resp) {
+      onCallback(resp);
+    }
   };
 
   return (

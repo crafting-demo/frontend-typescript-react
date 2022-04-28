@@ -4,26 +4,26 @@ import { v4 as uuidv4 } from "uuid";
 import {
   Action,
   ActionType,
-  Dependency,
+  DependencyType,
   Message,
   Payload,
-  Topic,
+  ServiceType,
 } from "common";
 
 export function RandomMessage(): Message {
   return {
     meta: {
-      caller: Topic.React,
-      callee: RandomCallee(),
+      caller: ServiceType.React,
+      callee: ServiceType.Gin, // RandomCallee()
       callTime: new Date().toUTCString(),
     },
     actions: RandomActions(RandomPick()),
   };
 }
 
-export function RandomCallee(): Topic {
+export function RandomCallee(): ServiceType {
   return RandomPick(
-    Object.values(Topic).filter((value) => value !== Topic.React)
+    Object.values(ServiceType).filter((value) => value !== ServiceType.React)
   );
 }
 
@@ -47,13 +47,9 @@ export function RandomActionPayload(action: ActionType): Payload {
   const payload: Payload = {};
 
   const lorem = new LoremIpsum({
-    sentencesPerParagraph: {
-      max: 8,
-      min: 4,
-    },
     wordsPerSentence: {
-      max: 16,
-      min: 4,
+      max: 10,
+      min: 5,
     },
   });
 
@@ -62,18 +58,23 @@ export function RandomActionPayload(action: ActionType): Payload {
   }
 
   if (action === ActionType.Read) {
-    payload.serviceName = RandomPick(Object.values(Dependency));
+    payload.serviceName = RandomPick(Object.values(DependencyType));
     payload.key = uuidv4();
   }
 
   if (action === ActionType.Write) {
-    payload.serviceName = RandomPick(Object.values(Dependency));
+    payload.serviceName = RandomPick(Object.values(DependencyType));
     payload.key = uuidv4();
     payload.value = lorem.generateSentences(1);
   }
 
   if (action === ActionType.Call) {
-    payload.serviceName = RandomCallee();
+    payload.serviceName = ServiceType.Gin; // RandomCallee()
+    payload.actions = RandomActions(RandomPick());
+  }
+
+  if (action === ActionType.Enqueue) {
+    payload.serviceName = ServiceType.Gin; // RandomCallee()
     payload.actions = RandomActions(RandomPick());
   }
 
@@ -81,7 +82,7 @@ export function RandomActionPayload(action: ActionType): Payload {
 }
 
 export function RandomPick(sample?: any[]): any {
-  const a = sample || [1, 2, 3, 4, 5];
+  const a = sample || [1, 2, 3];
   return a[Math.floor(Math.random() * a.length)];
 }
 
