@@ -15,6 +15,7 @@ interface MessageBuilderParams {
 export function MessageBuilder(params: MessageBuilderParams) {
   const mobile = useMobile();
   const [message, setMessage] = useState(RandomMessageString());
+  const [pretty, setPretty] = useState(true);
   const [errors, setErrors] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -51,7 +52,24 @@ export function MessageBuilder(params: MessageBuilderParams) {
 
   const handleGenerate = () => {
     setMessage(RandomMessageString());
+    setPretty(true);
     setErrors("");
+  };
+
+  const handlePrettify = () => {
+    try {
+      const parsed = JSON.parse(message);
+      if (pretty) {
+        setMessage(JSON.stringify(parsed));
+        setPretty(false);
+      } else {
+        setMessage(JSON.stringify(parsed, null, 2));
+        setPretty(true);
+      }
+    } catch (e) {
+      setErrors(`Error: ${e}`);
+      handleOpenSnackbar();
+    }
   };
 
   const handleClear = () => {
@@ -86,6 +104,9 @@ export function MessageBuilder(params: MessageBuilderParams) {
         orientation={mobile ? "vertical" : "horizontal"}
       >
         <Button onClick={handleGenerate}>Generate</Button>
+        <Button onClick={handlePrettify} disabled={!message}>
+          Prettify
+        </Button>
         <Button onClick={handleClear} disabled={!message}>
           Clear
         </Button>
