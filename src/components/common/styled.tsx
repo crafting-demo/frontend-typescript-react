@@ -1,4 +1,5 @@
-import { Box, BoxProps, ButtonGroup, styled } from "@mui/material";
+import { TimelineDot } from "@mui/lab";
+import { Box, BoxProps, ButtonGroup, styled, Typography } from "@mui/material";
 
 import { colors } from "styles";
 
@@ -65,6 +66,37 @@ export const InputField = styled("textarea")(() => ({
 export const ResponseWrapper = styled(Box)(() => ({
   display: "flex",
   flexWrap: "wrap",
+  width: "100%",
+}));
+
+export const ResponseTitle = styled(Typography)(() => ({
+  padding: "0 15px",
+  color: colors.black[100],
+  fontSize: "16px",
+}));
+
+export const TimelineDotRipple = styled(TimelineDot)(() => ({
+  "&::after": {
+    width: "14px",
+    height: "14px",
+    marginLeft: "-7px",
+    marginTop: "-7px",
+    position: "absolute",
+    borderRadius: "50%",
+    animation: "ripple 1.2s infinite ease-in-out",
+    border: "1px solid #CFD8DC",
+    content: '""',
+  },
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
+      opacity: 1,
+    },
+    "100%": {
+      transform: "scale(2.4)",
+      opacity: 0,
+    },
+  },
 }));
 
 export const FullScreenModal = styled(Box)(() => ({
@@ -74,5 +106,7 @@ export const FullScreenModal = styled(Box)(() => ({
   opacity: "0.9",
   top: "0",
   left: "0",
+  padding: "50px 30px",
+  overflowY: "auto",
   backgroundColor: colors.white[0],
 }));

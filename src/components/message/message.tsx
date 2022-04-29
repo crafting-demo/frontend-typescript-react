@@ -83,7 +83,6 @@ export function MessageBuilder(params: MessageBuilderParams) {
     <>
       <InputBtnGroup
         variant="text"
-        size="small"
         orientation={mobile ? "vertical" : "horizontal"}
       >
         <Button onClick={handleGenerate}>Generate</Button>
