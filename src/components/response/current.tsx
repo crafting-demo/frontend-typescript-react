@@ -53,7 +53,7 @@ export function CurrentTimeline(params: CurrentTimelineParams) {
             {message ? (
               <>
                 <Box
-                  onClick={handleOpenModal}
+                  onClick={handleOpenModal()}
                   sx={{
                     cursor: "pointer",
                     fontWeight: "bold",
