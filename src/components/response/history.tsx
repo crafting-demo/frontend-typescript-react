@@ -26,6 +26,12 @@ export function HistoryTimeline() {
   useEffect(() => {
     const consumer = new Consumer(ServiceType.React);
     consumer.start(handleChange);
+
+    while (true) {
+      if (!consumer.ready()) {
+        consumer.reconnect();
+      }
+    }
   }, []);
 
   useEffect(() => {

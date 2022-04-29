@@ -28,6 +28,7 @@ module.exports = {
     "import/no-unresolved": "error",
     "import/prefer-default-export": "off",
     "@typescript-eslint/no-use-before-define": "off",
+    "no-constant-condition": ["error", { checkLoops: false }],
     "import/order": [
       "error",
       {
