@@ -1,4 +1,4 @@
-import { ServiceType } from "common/types";
+import { Message, ServiceType } from "common/types";
 
 // generateUniqueID returns a unique enough string
 // to populate "key" prop for each child in a list.
@@ -9,8 +9,8 @@ export const generateUniqueID = (): string => {
   return `${date}-${rand}`;
 };
 
-// PickColorByTopic returns theme color name by service type.
-export const PickColorByTopic = (topic: string) => {
+// pickColorByTopic returns theme color name by service type.
+export const pickColorByTopic = (topic: string) => {
   switch (topic) {
     case ServiceType.React:
       return "error";
@@ -27,4 +27,34 @@ export const PickColorByTopic = (topic: string) => {
     default:
       return "error";
   }
+};
+
+export const findFirstIndexOf = (value: Message, self: Message[]) => {
+  for (let i = 0; i < self.length; i += 1) {
+    if (
+      self[i].meta.callee === value.meta.callee &&
+      self[i].meta.callTime === value.meta.callTime
+    ) {
+      return i;
+    }
+  }
+  return -1;
+};
+
+export const uniqueMessages = (
+  value: Message,
+  index: number,
+  self: Message[]
+) => findFirstIndexOf(value, self) === index;
+
+export const sortMessages = (m1: Message, m2: Message) => {
+  const d1 = Date.parse(m1.meta.callTime!);
+  const d2 = Date.parse(m2.meta.callTime!);
+  if (d1 > d2) {
+    return -1;
+  }
+  if (d1 < d2) {
+    return 1;
+  }
+  return 0;
 };

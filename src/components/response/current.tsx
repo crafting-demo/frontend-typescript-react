@@ -12,7 +12,7 @@ import {
 } from "@mui/lab";
 import { Box } from "@mui/material";
 
-import { generateUniqueID, PickColorByTopic } from "common";
+import { generateUniqueID, pickColorByTopic } from "common";
 import { Message, Action, ActionType } from "common/types";
 import { ResponseTitle, TimelineDotRipple } from "components/common";
 import { ResponseModal } from "components/response/modal";
@@ -35,7 +35,7 @@ export function CurrentTimeline(params: CurrentTimelineParams) {
   const { message } = params;
 
   const themeColor = message
-    ? PickColorByTopic(message.meta.callee)
+    ? pickColorByTopic(message.meta.callee)
     : "inherit";
 
   return (
@@ -44,7 +44,7 @@ export function CurrentTimeline(params: CurrentTimelineParams) {
         variant="h6"
         sx={{ textAlign: "right", paddingRight: "18px" }}
       >
-        Current Request
+        Current Response
       </ResponseTitle>
 
       <Timeline>
@@ -68,7 +68,7 @@ export function CurrentTimeline(params: CurrentTimelineParams) {
                 />
               </>
             ) : (
-              <Box>Send a new message. Waiting ...</Box>
+              <Box>Send a new message ...</Box>
             )}
           </TimelineOppositeContent>
 
@@ -127,7 +127,7 @@ function TimelineItemActions(params: TimelineItemActionsParams) {
       {actions.map((action) => {
         const dbTheme = action.status === "Passed" ? "success" : "error";
         const themeColor = action.payload.serviceName
-          ? PickColorByTopic(action.payload.serviceName)
+          ? pickColorByTopic(action.payload.serviceName)
           : "inherit";
 
         switch (action.action) {

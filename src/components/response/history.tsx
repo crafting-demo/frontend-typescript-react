@@ -15,7 +15,7 @@ import ReactTimeAgo from "react-time-ago";
 
 import { Consumer } from "common/kafka-client";
 import { Message, ServiceType } from "common/types";
-import { generateUniqueID } from "common/utils";
+import { generateUniqueID, sortMessages, uniqueMessages } from "common/utils";
 import { ResponseTitle } from "components/common";
 import { ResponseModal } from "components/response/modal";
 import { colors } from "styles";
@@ -58,8 +58,8 @@ export function HistoryTimeline() {
         <KeyboardArrowUpIcon sx={{ marginLeft: "-6px" }} />
 
         {messages
-          .slice()
-          .reverse()
+          .filter(uniqueMessages)
+          .sort(sortMessages)
           .map((msg, i) => (
             <TimelineItem key={generateUniqueID()}>
               <TimelineOppositeContent sx={{ display: "none" }} />
