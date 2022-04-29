@@ -1,8 +1,8 @@
 import { Close as CloseIcon } from "@mui/icons-material";
-import { Modal, Button, TextField } from "@mui/material";
+import { Modal, Button } from "@mui/material";
 
 import { Message } from "common/types";
-import { FullScreenModal } from "components/common";
+import { FullScreenModal, InputField } from "components/common";
 
 interface ResponseModalProps {
   open: boolean;
@@ -12,6 +12,9 @@ interface ResponseModalProps {
 
 export function ResponseModal(props: ResponseModalProps) {
   const { open, onClose, message } = props;
+
+  const prettyJSON = JSON.stringify(message, null, 2);
+  const lines = prettyJSON.split("\n").length + 50;
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -31,19 +34,12 @@ export function ResponseModal(props: ResponseModalProps) {
         >
           <CloseIcon />
         </Button>
-        <TextField
-          multiline
-          fullWidth
-          aria-readonly
-          variant="standard"
-          value={JSON.stringify(message, null, 2)}
-          sx={{
-            "& .MuiInput-root": {
-              "&:before, :after, :hover:not(.Mui-disabled):before": {
-                borderBottom: 0,
-              },
-            },
-          }}
+
+        <InputField
+          readOnly
+          rows={lines}
+          value={prettyJSON}
+          sx={{ width: "100%", overflow: "hidden" }}
         />
       </FullScreenModal>
     </Modal>
