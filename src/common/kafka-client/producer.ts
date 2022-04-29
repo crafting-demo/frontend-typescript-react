@@ -14,9 +14,9 @@ export class Producer {
     this.producer = new WebSocket(`${this.broker}/producer/${this.topic}`);
   }
 
-  public async send(message: string) {
+  public send(message: string) {
     this.producer.onopen = () => {
-      this.producer.send(JSON.stringify(JSON.parse(message)));
+      this.producer.send(message);
     };
   }
 

@@ -1,22 +1,19 @@
-import { Box } from "@mui/material";
 import { Message } from "common/types";
+import { ResponseWrapper } from "components/common";
+import { CurrentTimeline } from "components/response/current";
+import { HistoryTimeline } from "components/response/history";
 
-interface ResponseBuilderParams {
-  response?: Message;
+interface ResponseParams {
+  message?: Message;
 }
 
-export function ResponseBuilder(params: ResponseBuilderParams) {
-  const { response } = params;
+export function Response(params: ResponseParams) {
+  const { message } = params;
 
   return (
-    <>
-      {response && (
-        <Box>
-          <pre>{JSON.stringify(response, null, 2)}</pre>
-        </Box>
-      )}
-
-      {!response && <Box>No response yet</Box>}
-    </>
+    <ResponseWrapper>
+      <CurrentTimeline message={message} />
+      <HistoryTimeline />
+    </ResponseWrapper>
   );
 }

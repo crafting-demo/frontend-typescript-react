@@ -3,12 +3,11 @@ export enum ActionType {
   Read = "Read",
   Write = "Write",
   Call = "Call",
-  Enqueue = "Enqueue",
 }
 
 export enum StatusType {
-  Passed = "passed",
-  Failed = "failed",
+  Passed = "Passed",
+  Failed = "Failed",
 }
 
 export enum ServiceType {
@@ -36,15 +35,16 @@ export interface Message {
 export interface Meta {
   caller: string;
   callee: string;
-  callTime: string;
+  callTime?: string;
+  returnTime?: string;
 }
 
 export interface Action {
   serviceName?: string;
-  returnTime?: string;
-  status?: string;
   action: string;
   payload: Payload;
+  status?: string;
+  returnTime?: string;
 }
 
 export interface Payload {

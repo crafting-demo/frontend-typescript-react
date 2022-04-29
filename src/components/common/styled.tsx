@@ -1,4 +1,4 @@
-import { Box, BoxProps, styled } from "@mui/material";
+import { Box, BoxProps, ButtonGroup, styled } from "@mui/material";
 
 import { colors } from "styles";
 
@@ -30,15 +30,15 @@ export const AppSectionWrapper = styled(Box)<BoxProps & { mobile?: number }>(
         }
 );
 
-export const InputBtnGroupJSON = styled(Box)(() => ({
-  display: "flex",
-  flexWrap: "wrap",
-  alignContent: "bottom",
-  marginTop: "20px",
-  justifyContent: "right",
+export const InputBtnGroup = styled(ButtonGroup)(() => ({
+  marginBottom: "20px",
+  "& button": {
+    marginRight: "20px",
+    border: "none !important",
+  },
 }));
 
-export const InputFieldJSON = styled("textarea")(() => ({
+export const InputField = styled("textarea")(() => ({
   width: "100%",
   resize: "none",
   border: "0px",
@@ -62,6 +62,11 @@ export const InputFieldJSON = styled("textarea")(() => ({
   },
 }));
 
+export const ResponseWrapper = styled(Box)(() => ({
+  display: "flex",
+  flexWrap: "wrap",
+}));
+
 export const FullScreenModal = styled(Box)(() => ({
   width: "100%",
   height: "100%",
@@ -69,5 +74,5 @@ export const FullScreenModal = styled(Box)(() => ({
   opacity: "0.9",
   top: "0",
   left: "0",
-  backgroundColor: colors.white[100],
+  backgroundColor: colors.white[0],
 }));

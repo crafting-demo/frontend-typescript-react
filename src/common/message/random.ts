@@ -15,7 +15,6 @@ export function RandomMessage(): Message {
     meta: {
       caller: ServiceType.React,
       callee: ServiceType.Gin, // RandomCallee()
-      callTime: new Date().toUTCString(),
     },
     actions: RandomActions(RandomPick()),
   };
@@ -73,16 +72,11 @@ export function RandomActionPayload(action: ActionType): Payload {
     payload.actions = RandomActions(RandomPick());
   }
 
-  if (action === ActionType.Enqueue) {
-    payload.serviceName = ServiceType.Gin; // RandomCallee()
-    payload.actions = RandomActions(RandomPick());
-  }
-
   return payload;
 }
 
 export function RandomPick(sample?: any[]): any {
-  const a = sample || [1, 2, 3];
+  const a = sample || [1, 2, 3, 4, 5];
   return a[Math.floor(Math.random() * a.length)];
 }
 

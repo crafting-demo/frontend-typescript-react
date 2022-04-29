@@ -35,11 +35,7 @@ export function ValidateMeta(meta: Meta): string[] {
   const errors: string[] = [];
 
   if (Object.keys(meta).length === 0) {
-    return [
-      "missing 'caller' field",
-      "missing 'callee' field",
-      "missing 'callTime' field",
-    ];
+    return ["missing 'caller' field", "missing 'callee' field"];
   }
 
   if (!Object.keys(meta).includes("caller")) {
@@ -47,9 +43,6 @@ export function ValidateMeta(meta: Meta): string[] {
   }
   if (!Object.keys(meta).includes("callee")) {
     errors.push("missing 'callee' field");
-  }
-  if (!Object.keys(meta).includes("callTime")) {
-    errors.push("missing 'callTime' field");
   }
 
   return errors;

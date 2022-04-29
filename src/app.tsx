@@ -6,34 +6,29 @@ import { useMobile } from "common/hooks";
 import { Message } from "common/types";
 import { AppContainer, AppSectionWrapper } from "components/common";
 import { MessageBuilder } from "components/message";
-import { ResponseBuilder } from "components/response";
+import { Response } from "components/response";
 
 export function App() {
-  return (
-    <>
-      <CssBaseline />
-      <Page />
-    </>
-  );
-}
-
-function Page() {
   const mobile = useMobile();
-  const [response, setResponse] = useState<Message>();
+  const [message, setMessage] = useState<Message>();
 
-  const handleChangeResponse = (message: Message) => {
-    setResponse(message);
+  const handleChange = (msg: Message) => {
+    setMessage(msg);
   };
 
   return (
-    <AppContainer mobile={+mobile}>
-      <AppSectionWrapper mobile={+mobile}>
-        <MessageBuilder onCallback={handleChangeResponse} />
-      </AppSectionWrapper>
+    <>
+      <CssBaseline />
 
-      <AppSectionWrapper mobile={+mobile}>
-        <ResponseBuilder response={response} />
-      </AppSectionWrapper>
-    </AppContainer>
+      <AppContainer mobile={+mobile}>
+        <AppSectionWrapper mobile={+mobile}>
+          <MessageBuilder onCallback={handleChange} />
+        </AppSectionWrapper>
+
+        <AppSectionWrapper mobile={+mobile}>
+          <Response message={message} />
+        </AppSectionWrapper>
+      </AppContainer>
+    </>
   );
 }
