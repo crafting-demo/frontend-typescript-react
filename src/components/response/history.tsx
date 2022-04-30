@@ -17,7 +17,7 @@ import { Consumer } from "common/kafka-client";
 import { Message, ServiceType } from "common/types";
 import { generateUniqueID, sortMessages, uniqueMessages } from "common/utils";
 import { ResponseTitle } from "components/common";
-import { ResponseModal } from "components/response/modal";
+import { FullScreenModal } from "components/modal";
 import { colors } from "styles";
 
 export function HistoryTimeline() {
@@ -52,7 +52,9 @@ export function HistoryTimeline() {
 
   return (
     <Box sx={{ width: "50%" }}>
-      <ResponseTitle variant="h6">History</ResponseTitle>
+      <ResponseTitle variant="h6" sx={{ paddingTop: "5px" }}>
+        History (kafka)
+      </ResponseTitle>
 
       <Timeline>
         <KeyboardArrowUpIcon sx={{ marginLeft: "-6px" }} />
@@ -92,7 +94,7 @@ export function HistoryTimeline() {
                 </Box>
               </TimelineContent>
 
-              <ResponseModal
+              <FullScreenModal
                 open={open === i}
                 onClose={handleCloseModal}
                 message={msg}

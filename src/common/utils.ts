@@ -13,17 +13,17 @@ export const generateUniqueID = (): string => {
 export const pickColorByTopic = (topic: string) => {
   switch (topic) {
     case ServiceType.React:
-      return "error";
+      return "primary";
     case ServiceType.Gin:
       return "info";
     case ServiceType.Express:
-      return "primary";
+      return "success";
     case ServiceType.Rails:
-      return "warning";
+      return "error";
     case ServiceType.Spring:
       return "secondary";
     case ServiceType.Django:
-      return "success";
+      return "warning";
     default:
       return "error";
   }

@@ -17,7 +17,7 @@ export function MessageBuilder(params: MessageBuilderParams) {
   const [message, setMessage] = useState(RandomMessageString());
   const [pretty, setPretty] = useState(true);
   const [errors, setErrors] = useState("");
-  const [open, setOpen] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const validateMessage = (): boolean => {
     const err = ValidateMessage(message);
@@ -30,7 +30,7 @@ export function MessageBuilder(params: MessageBuilderParams) {
   };
 
   const handleOpenSnackbar = () => {
-    setOpen(true);
+    setOpenSnackbar(true);
   };
 
   const handleCloseSnackbar = (
@@ -40,7 +40,7 @@ export function MessageBuilder(params: MessageBuilderParams) {
     if (reason === "clickaway") {
       return;
     }
-    setOpen(false);
+    setOpenSnackbar(false);
   };
 
   const handleChange = (event: {
@@ -125,7 +125,7 @@ export function MessageBuilder(params: MessageBuilderParams) {
       />
 
       <Snackbar
-        open={open}
+        open={openSnackbar}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
       >

@@ -98,15 +98,3 @@ export const TimelineDotRipple = styled(TimelineDot)(() => ({
     },
   },
 }));
-
-export const FullScreenModal = styled(Box)(() => ({
-  width: "100%",
-  height: "100%",
-  position: "absolute",
-  opacity: "0.9",
-  top: "0",
-  left: "0",
-  padding: "50px 30px",
-  overflowY: "auto",
-  backgroundColor: colors.white[0],
-}));

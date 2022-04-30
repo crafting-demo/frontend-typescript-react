@@ -15,7 +15,7 @@ import { Box } from "@mui/material";
 import { generateUniqueID, pickColorByTopic } from "common";
 import { Message, Action, ActionType } from "common/types";
 import { ResponseTitle, TimelineDotRipple } from "components/common";
-import { ResponseModal } from "components/response/modal";
+import { ContainedModal, FullScreenModal } from "components/modal";
 
 interface CurrentTimelineParams {
   message?: Message;
@@ -23,13 +23,22 @@ interface CurrentTimelineParams {
 
 export function CurrentTimeline(params: CurrentTimelineParams) {
   const [open, setOpen] = useState(false);
+  const [openFullScreen, setOpenFullScreen] = useState(false);
 
-  const handleOpenModal = () => () => {
+  const handleOpenModal = () => {
     setOpen(true);
   };
 
   const handleCloseModal = () => {
     setOpen(false);
+  };
+
+  const handleOpenFullScreen = () => {
+    setOpenFullScreen(true);
+  };
+
+  const handleCloseFullScreen = () => {
+    setOpenFullScreen(false);
   };
 
   const { message } = params;
@@ -42,9 +51,9 @@ export function CurrentTimeline(params: CurrentTimelineParams) {
     <Box sx={{ width: "50%" }}>
       <ResponseTitle
         variant="h6"
-        sx={{ textAlign: "right", paddingRight: "18px" }}
+        sx={{ textAlign: "right", paddingRight: "18px", paddingTop: "5px" }}
       >
-        Current Response
+        Current response
       </ResponseTitle>
 
       <Timeline>
@@ -53,33 +62,44 @@ export function CurrentTimeline(params: CurrentTimelineParams) {
             {message ? (
               <>
                 <Box
-                  onClick={handleOpenModal()}
+                  onClick={handleOpenFullScreen}
                   sx={{
                     cursor: "pointer",
-                    fontWeight: "bold",
+                    color: `${pickColorByTopic(message.meta.caller)}.main`,
                   }}
                 >
-                  Read full JSON
+                  {message.meta.caller}
                 </Box>
-                <ResponseModal
-                  open={open}
-                  onClose={handleCloseModal}
+                <FullScreenModal
+                  open={openFullScreen}
+                  onClose={handleCloseFullScreen}
                   message={message}
                 />
               </>
             ) : (
-              <Box>Send a new message ...</Box>
+              <Box>Send a new request ...</Box>
             )}
           </TimelineOppositeContent>
 
           <TimelineSeparator>
             {message ? (
-              <TimelineDot variant="outlined" color="inherit" />
+              <>
+                <TimelineDot
+                  variant="outlined"
+                  color={pickColorByTopic(message.meta.caller)}
+                />
+                <TimelineConnector
+                  sx={{
+                    bgcolor: `${pickColorByTopic(message.meta.caller)}.main`,
+                  }}
+                />
+              </>
             ) : (
-              <TimelineDotRipple variant="outlined" />
+              <>
+                <TimelineDotRipple variant="outlined" />
+                <TimelineConnector />
+              </>
             )}
-
-            <TimelineConnector />
           </TimelineSeparator>
 
           <TimelineContent sx={{ display: "none" }} />
@@ -89,9 +109,26 @@ export function CurrentTimeline(params: CurrentTimelineParams) {
           <>
             <TimelineItem>
               <TimelineOppositeContent>
-                <Box sx={{ color: `${themeColor}.main` }}>
+                <Box
+                  color="inherit"
+                  onClick={handleOpenModal}
+                  sx={{ color: `${themeColor}.main`, cursor: "pointer" }}
+                >
                   {message.meta.callee}
                 </Box>
+
+                <ContainedModal
+                  open={open}
+                  onClose={handleCloseModal}
+                  action={{
+                    action: "Call",
+                    payload: {
+                      serviceName: message.meta.callee,
+                    },
+                    returnTime: message.meta.returnTime,
+                    status: "Passed",
+                  }}
+                />
               </TimelineOppositeContent>
 
               <TimelineSeparator>
@@ -120,41 +157,49 @@ interface TimelineItemActionsParams {
 }
 
 function TimelineItemActions(params: TimelineItemActionsParams) {
+  const [open, setOpen] = useState(-1);
+
+  const handleOpenModal = (i: number) => () => {
+    setOpen(i);
+  };
+
+  const handleCloseModal = () => {
+    setOpen(-1);
+  };
+
   const { actions } = params;
 
   return (
     <>
-      {actions.map((action) => {
-        const dbTheme = action.status === "Passed" ? "success" : "error";
+      {actions.map((action, i) => {
         const themeColor = action.payload.serviceName
           ? pickColorByTopic(action.payload.serviceName)
           : "inherit";
 
         switch (action.action) {
-          case "Read":
+          case ActionType.Read:
             return (
               <TimelineItem key={generateUniqueID()}>
-                <TimelineOppositeContent
-                  sx={{
-                    m: "auto 0",
-                    paddingBottom: "40px",
-                  }}
-                >
-                  <Box>Read - {action.payload.serviceName}</Box>
+                <TimelineOppositeContent>
                   <Box
-                    sx={{
-                      color: `${dbTheme}.main`,
-                      textTransform: "uppercase",
-                    }}
+                    color="inherit"
+                    onClick={handleOpenModal(i)}
+                    sx={{ cursor: "pointer" }}
                   >
-                    {action.status}
+                    {action.payload.serviceName}
                   </Box>
+
+                  <ContainedModal
+                    open={open === i}
+                    onClose={handleCloseModal}
+                    action={action}
+                  />
                 </TimelineOppositeContent>
 
                 <TimelineSeparator>
-                  <TimelineDot variant="outlined" color={dbTheme} />
+                  <TimelineDot variant="outlined" color="inherit" />
 
-                  <TimelineConnector sx={{ bgcolor: `${dbTheme}.main` }} />
+                  <TimelineConnector />
                 </TimelineSeparator>
 
                 <TimelineContent sx={{ display: "none" }} />
@@ -164,27 +209,26 @@ function TimelineItemActions(params: TimelineItemActionsParams) {
           case ActionType.Write:
             return (
               <TimelineItem key={generateUniqueID()}>
-                <TimelineOppositeContent
-                  sx={{
-                    m: "auto 0",
-                    paddingBottom: "40px",
-                  }}
-                >
-                  <Box>Write - {action.payload.serviceName}</Box>
+                <TimelineOppositeContent>
                   <Box
-                    sx={{
-                      color: `${dbTheme}.main`,
-                      textTransform: "uppercase",
-                    }}
+                    color="inherit"
+                    onClick={handleOpenModal(i)}
+                    sx={{ cursor: "pointer" }}
                   >
-                    {action.status}
+                    {action.payload.serviceName}
                   </Box>
+
+                  <ContainedModal
+                    open={open === i}
+                    onClose={handleCloseModal}
+                    action={action}
+                  />
                 </TimelineOppositeContent>
 
                 <TimelineSeparator>
-                  <TimelineDot variant="outlined" color={dbTheme} />
+                  <TimelineDot variant="outlined" color="inherit" />
 
-                  <TimelineConnector sx={{ bgcolor: `${dbTheme}.main` }} />
+                  <TimelineConnector />
                 </TimelineSeparator>
 
                 <TimelineContent sx={{ display: "none" }} />
@@ -196,9 +240,19 @@ function TimelineItemActions(params: TimelineItemActionsParams) {
               <Box key={generateUniqueID()}>
                 <TimelineItem>
                   <TimelineOppositeContent>
-                    <Box sx={{ color: `${themeColor}.main` }}>
+                    <Box
+                      color="inherit"
+                      onClick={handleOpenModal(i)}
+                      sx={{ color: `${themeColor}.main`, cursor: "pointer" }}
+                    >
                       {action.payload.serviceName}
                     </Box>
+
+                    <ContainedModal
+                      open={open === i}
+                      onClose={handleCloseModal}
+                      action={action}
+                    />
                   </TimelineOppositeContent>
 
                   <TimelineSeparator>
@@ -217,7 +271,6 @@ function TimelineItemActions(params: TimelineItemActionsParams) {
                 <TimelineItemActions actions={action.payload.actions!} />
               </Box>
             );
-
           default:
             return <Box key={generateUniqueID()} />;
         }
