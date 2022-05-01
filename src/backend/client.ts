@@ -1,4 +1,5 @@
 import { Message, ServiceType } from "common/types";
+import { logger } from "logger";
 
 export class Client {
   private url: string;
@@ -26,7 +27,7 @@ export class Client {
     }
   }
 
-  public async makeNestedCall(message: Message): Promise<Message | null> {
+  public async makeServiceCall(message: Message): Promise<Message | null> {
     const resp = await fetch(this.url, {
       method: "post",
       headers: {
@@ -35,6 +36,12 @@ export class Client {
       body: JSON.stringify(message),
     });
     if (!resp.ok) {
+      const err = await resp.json();
+      logger.write(
+        "makeServiceCall",
+        "encountered error when making service call",
+        err
+      );
       return null;
     }
     return (await resp.json()) as Message | null;
