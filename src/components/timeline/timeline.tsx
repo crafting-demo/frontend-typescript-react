@@ -1,3 +1,3 @@
-export function Timeline() {
+export function TimelineBuilder() {
   return <div />;
 }

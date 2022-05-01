@@ -6,8 +6,8 @@ import {
   AppWrapperMessage,
   AppWrapperTimeline,
 } from "components/common";
-import { Message } from "components/message";
-import { Timeline } from "components/timeline";
+import { MessageBuilder } from "components/message";
+import { TimelineBuilder } from "components/timeline";
 
 export function App() {
   const mobile = useMobile();
@@ -18,10 +18,10 @@ export function App() {
 
       <AppContainer mobile={+mobile}>
         <AppWrapperMessage mobile={+mobile}>
-          <Message />
+          <MessageBuilder />
         </AppWrapperMessage>
         <AppWrapperTimeline mobile={+mobile}>
-          <Timeline />
+          <TimelineBuilder />
         </AppWrapperTimeline>
       </AppContainer>
     </>
