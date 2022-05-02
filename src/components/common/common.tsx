@@ -1,4 +1,6 @@
-import { Box, BoxProps, styled } from "@mui/material";
+import { Box, BoxProps, Divider, styled, Typography } from "@mui/material";
+
+import { colors } from "styles";
 
 export const AppContainer = styled(Box)<BoxProps & { mobile?: number }>(
   ({ mobile }) => ({
@@ -27,6 +29,7 @@ export const AppWrapperMessage = styled(Box)<BoxProps & { mobile?: number }>(
     overflowY: "scroll",
     width: mobile ? "100%" : "60%",
     minHeight: mobile ? "50vh" : "100vh",
+    padding: mobile ? "20px 10px" : "20px",
   })
 );
 
@@ -36,3 +39,16 @@ export const AppWrapperTimeline = styled(Box)<BoxProps & { mobile?: number }>(
     minHeight: mobile ? "50vh" : "100vh",
   })
 );
+
+export const AppWrapperName = styled(Typography)(() => ({
+  fontSize: "30px",
+  margin: "30px 0",
+  color: colors.black[200],
+}));
+
+export const AppDivider = styled(Divider)(() => ({
+  maxWidth: "200px",
+  margin: "40px 0",
+  color: colors.black[200],
+  borderColor: colors.black[400],
+}));
