@@ -20,7 +20,6 @@ export function Graph(params: GraphParams) {
         sx={{
           width: "100%",
           height: "100%",
-          opacity: "0.9",
           overflowY: "auto",
           backgroundColor: colors.white[0],
           "::-webkit-scrollbar": {
@@ -39,7 +38,19 @@ export function Graph(params: GraphParams) {
           },
         }}
       >
-        <Button onClick={onClose}>
+        <Button
+          color="inherit"
+          onClick={onClose}
+          sx={{
+            position: "fixed",
+            right: "20px",
+            top: "20px",
+            zIndex: "1000",
+            "&:hover": {
+              backgroundColor: "transparent",
+            },
+          }}
+        >
           <CloseIcon />
         </Button>
 
