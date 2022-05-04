@@ -1,5 +1,11 @@
 import { useState } from "react";
 
+import {
+  Send as SendIcon,
+  AddCircle as AddCircleIcon,
+  DeleteForever as DeleteForeverIcon,
+  CheckCircle as CheckCircleIcon,
+} from "@mui/icons-material";
 import { Snackbar, Alert, Button, ButtonGroup } from "@mui/material";
 
 import { Client } from "backend";
@@ -195,7 +201,6 @@ export function MessageBuilder() {
   return (
     <>
       <ButtonGroup
-        variant="text"
         orientation={mobile ? "vertical" : "horizontal"}
         sx={{
           marginBottom: "20px",
@@ -205,14 +210,35 @@ export function MessageBuilder() {
           },
         }}
       >
-        <Button onClick={handleGenerate}>Generate</Button>
-        <Button onClick={handleValidate} disabled={!message}>
+        <Button
+          variant="outlined"
+          endIcon={<AddCircleIcon />}
+          onClick={handleGenerate}
+        >
+          Generate
+        </Button>
+        <Button
+          variant="outlined"
+          endIcon={<CheckCircleIcon />}
+          onClick={handleValidate}
+          disabled={!message}
+        >
           Validate
         </Button>
-        <Button onClick={handleClear} disabled={!message}>
+        <Button
+          variant="outlined"
+          endIcon={<DeleteForeverIcon />}
+          onClick={handleClear}
+          disabled={!message}
+        >
           Clear
         </Button>
-        <Button onClick={handleSend} disabled={!message}>
+        <Button
+          variant="contained"
+          endIcon={<SendIcon />}
+          onClick={handleSend}
+          disabled={!message}
+        >
           Send
         </Button>
       </ButtonGroup>
