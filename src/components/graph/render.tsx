@@ -9,5 +9,9 @@ interface RenderParams {
 export function Render(params: RenderParams) {
   const { message } = params;
 
-  return <Box>Callee: {message.meta.callee}</Box>;
+  return (
+    <Box>
+      <pre>{JSON.stringify(message, null, 2)}</pre>
+    </Box>
+  );
 }

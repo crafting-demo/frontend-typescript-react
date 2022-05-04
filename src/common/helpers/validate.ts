@@ -8,10 +8,10 @@ export function ValidateMessage(message: string): string[] {
     if (Object.keys(msg).length === 0) {
       return ["missing 'meta' field", "missing 'actions' field"];
     }
-    if (!Object.keys(msg).includes("meta")) {
+    if (!Object.keys(msg).includes("meta") || !msg.meta) {
       errors.push("missing 'meta' field");
     }
-    if (!Object.keys(msg).includes("actions")) {
+    if (!Object.keys(msg).includes("actions") || !msg.actions) {
       errors.push("missing 'actions' field");
       return errors;
     }
@@ -38,10 +38,10 @@ export function ValidateMeta(meta: Meta): string[] {
     return ["missing 'caller' field", "missing 'callee' field"];
   }
 
-  if (!Object.keys(meta).includes("caller")) {
+  if (!Object.keys(meta).includes("caller") || !meta.caller) {
     errors.push("missing 'caller' field");
   }
-  if (!Object.keys(meta).includes("callee")) {
+  if (!Object.keys(meta).includes("callee") || !meta.callee) {
     errors.push("missing 'callee' field");
   }
 
@@ -68,10 +68,10 @@ export function ValidateAction(action: Action): string[] {
     return ["missing 'action' field", "missing 'payload' field"];
   }
 
-  if (!Object.keys(action).includes("action")) {
+  if (!Object.keys(action).includes("action") || !action.action) {
     errors.push("missing 'action' field in action");
   }
-  if (!Object.keys(action).includes("payload")) {
+  if (!Object.keys(action).includes("payload") || !action.payload) {
     errors.push("missing 'payload' field in action");
   }
 
@@ -105,7 +105,7 @@ export function ValidatePayload(payload: Payload, action: string): string[] {
 }
 
 export function ValidateEchoPayload(payload: Payload): string[] {
-  if (!Object.keys(payload).includes("value")) {
+  if (!Object.keys(payload).includes("value") || !payload.value) {
     return ["missing 'value' field in Echo payload"];
   }
 
@@ -115,10 +115,10 @@ export function ValidateEchoPayload(payload: Payload): string[] {
 export function ValidateReadPayload(payload: Payload): string[] {
   const errors: string[] = [];
 
-  if (!Object.keys(payload).includes("serviceName")) {
+  if (!Object.keys(payload).includes("serviceName") || !payload.serviceName) {
     errors.push("missing 'serviceName' field in Read payload");
   }
-  if (!Object.keys(payload).includes("key")) {
+  if (!Object.keys(payload).includes("key") || !payload.key) {
     errors.push("missing 'key' field in Read payload");
   }
 
@@ -128,13 +128,13 @@ export function ValidateReadPayload(payload: Payload): string[] {
 export function ValidateWritePayload(payload: Payload): string[] {
   const errors: string[] = [];
 
-  if (!Object.keys(payload).includes("serviceName")) {
+  if (!Object.keys(payload).includes("serviceName") || !payload.serviceName) {
     errors.push("missing 'serviceName' field in Write payload");
   }
-  if (!Object.keys(payload).includes("key")) {
+  if (!Object.keys(payload).includes("key") || !payload.key) {
     errors.push("missing 'key' field in Write payload");
   }
-  if (!Object.keys(payload).includes("value")) {
+  if (!Object.keys(payload).includes("value") || !payload.value) {
     errors.push("missing 'value' field in Write payload");
   }
 
@@ -144,10 +144,10 @@ export function ValidateWritePayload(payload: Payload): string[] {
 export function ValidateCallPayload(payload: Payload): string[] {
   const errors: string[] = [];
 
-  if (!Object.keys(payload).includes("serviceName")) {
+  if (!Object.keys(payload).includes("serviceName") || !payload.serviceName) {
     errors.push("missing 'serviceName' field in Call payload");
   }
-  if (!Object.keys(payload).includes("actions")) {
+  if (!Object.keys(payload).includes("actions") || !payload.actions) {
     errors.push("missing 'actions' field in Call payload");
   }
 

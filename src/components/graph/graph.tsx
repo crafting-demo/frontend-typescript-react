@@ -23,6 +23,20 @@ export function Graph(params: GraphParams) {
           opacity: "0.9",
           overflowY: "auto",
           backgroundColor: colors.white[0],
+          "::-webkit-scrollbar": {
+            width: "4px",
+          },
+          "::-webkit-scrollbar-track": {
+            backgroundColor: "#F1F1F1",
+            borderRadius: "16px",
+          },
+          "::-webkit-scrollbar-thumb": {
+            background: "#CCCCCC",
+            borderRadius: "16px",
+          },
+          "::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: "#BDBDBD",
+          },
         }}
       >
         <Button onClick={onClose}>

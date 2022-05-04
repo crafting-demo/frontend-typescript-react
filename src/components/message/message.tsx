@@ -5,7 +5,8 @@ import { Snackbar, Alert, Button, ButtonGroup } from "@mui/material";
 import { Client } from "backend";
 import { emptyMessage, RandomMessage, ValidateMessage } from "common/helpers";
 import { useMobile } from "common/hooks";
-import { Action } from "common/types";
+import { Action, Message } from "common/types";
+import { Graph } from "components/graph";
 import { InteractiveBuilder } from "components/message/interactive";
 import { logger } from "logger";
 
@@ -15,6 +16,8 @@ export function MessageBuilder() {
   const [errors, setErrors] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [active, setActive] = useState(-1);
+  const [response, setResponse] = useState<Message | null>(null);
+  const [launchGraph, setLaunchGraph] = useState(false);
 
   const findCallee = (actions: Action[], location: number[]): string => {
     if (!location.length) {
@@ -184,7 +187,8 @@ export function MessageBuilder() {
       actions: message.actions,
     });
     if (resp) {
-      // launch graph with animation
+      setResponse(resp);
+      setLaunchGraph(true);
     }
   };
 
@@ -240,6 +244,14 @@ export function MessageBuilder() {
           {errors || "Validation passed"}
         </Alert>
       </Snackbar>
+
+      {response && (
+        <Graph
+          message={response}
+          open={launchGraph}
+          onClose={() => setLaunchGraph(false)}
+        />
+      )}
     </>
   );
 }
