@@ -112,6 +112,7 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
                       location.concat(i)
                     )
                   }
+                  onFocus={() => onChange.setActiveDepth(currentDepth)}
                   style={{ marginTop: 11 }}
                 />
               )}

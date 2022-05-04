@@ -29,21 +29,24 @@ export const AppWrapperMessage = styled(Box)<BoxProps & { mobile?: number }>(
     overflowY: "scroll",
     width: mobile ? "100%" : "60%",
     minHeight: mobile ? "50vh" : "100vh",
+    height: mobile ? "auto" : "100vh",
     padding: mobile ? "20px 10px" : "20px",
   })
 );
 
 export const AppWrapperTimeline = styled(Box)<BoxProps & { mobile?: number }>(
   ({ mobile }) => ({
+    overflowY: "scroll",
     width: mobile ? "100%" : "40%",
     minHeight: mobile ? "50vh" : "100vh",
+    height: mobile ? "auto" : "100vh",
   })
 );
 
 export const AppWrapperName = styled(Typography)(() => ({
   fontSize: "30px",
-  margin: "30px 0",
-  color: colors.black[200],
+  margin: "25px 0",
+  color: colors.black[100],
 }));
 
 export const AppDivider = styled(Divider)(() => ({
