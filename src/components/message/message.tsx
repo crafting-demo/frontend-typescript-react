@@ -7,6 +7,7 @@ import { logger } from "logger";
 
 export function MessageBuilder() {
   const [message, setMessage] = useState(emptyMessage());
+  const [active, setActive] = useState(-1);
 
   const handleChangeCallee = (value: string) => {
     setMessage({
@@ -34,6 +35,10 @@ export function MessageBuilder() {
       meta: message.meta,
       actions: createAction(message.actions, location),
     });
+  };
+
+  const handleChangeActive = (depth: number) => {
+    setActive(depth);
   };
 
   const findCallee = (actions: Action[], location: number[]): string => {
@@ -126,11 +131,14 @@ export function MessageBuilder() {
         message={message}
         actions={message.actions}
         location={[]}
+        activeDepth={active}
+        currentDepth={0}
         onChange={{
           findCallee,
           updateCallee: handleChangeCallee,
           createAction: handleCreateAction,
           updateActions: handleChangeActions,
+          setActiveDepth: handleChangeActive,
         }}
       />
 

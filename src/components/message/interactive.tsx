@@ -19,17 +19,21 @@ interface UpdateMessageMethods {
   updateCallee: (value: string) => void;
   createAction: (location: number[]) => void;
   updateActions: (attr: string, value: string, location: number[]) => void;
+  setActiveDepth: (depth: number) => void;
 }
 
 interface InteractiveBuilderParams {
   message: Message;
   actions: Action[];
   location: number[];
+  activeDepth: number;
+  currentDepth: number;
   onChange: UpdateMessageMethods;
 }
 
 export function InteractiveBuilder(params: InteractiveBuilderParams) {
-  const { message, actions, location, onChange } = params;
+  const { message, actions, location, activeDepth, currentDepth, onChange } =
+    params;
 
   return (
     <>
@@ -47,11 +51,16 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
                   location
                 )
           }
+          onFocus={() => onChange.setActiveDepth(currentDepth)}
           style={{ marginTop: 11 }}
         />
       </Box>
 
-      <InteractiveBlockWrapper>
+      <InteractiveBlockWrapper
+        sx={{
+          borderColor: activeDepth === currentDepth ? "primary.main" : "auto",
+        }}
+      >
         {actions.map((action, i) => (
           <Box sx={{ marginBottom: "20px" }}>
             <FormControl sx={{ paddingLeft: "5px" }}>
@@ -65,6 +74,7 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
                     location.concat(i)
                   )
                 }
+                onFocus={() => onChange.setActiveDepth(currentDepth)}
               >
                 <FormControlLabel
                   value={ActionType.Echo}
@@ -119,6 +129,7 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
                         location.concat(i)
                       )
                     }
+                    onFocus={() => onChange.setActiveDepth(currentDepth)}
                     style={{ marginTop: 11 }}
                   />
                   <TextFieldInput
@@ -132,6 +143,7 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
                         location.concat(i)
                       )
                     }
+                    onFocus={() => onChange.setActiveDepth(currentDepth)}
                     style={{ marginTop: 11 }}
                   />
                 </>
@@ -150,6 +162,7 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
                         location.concat(i)
                       )
                     }
+                    onFocus={() => onChange.setActiveDepth(currentDepth)}
                     style={{ marginTop: 11 }}
                   />
                   <TextFieldInput
@@ -163,6 +176,7 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
                         location.concat(i)
                       )
                     }
+                    onFocus={() => onChange.setActiveDepth(currentDepth)}
                     style={{ marginTop: 11 }}
                   />
                   <TextFieldInput
@@ -176,6 +190,7 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
                         location.concat(i)
                       )
                     }
+                    onFocus={() => onChange.setActiveDepth(currentDepth)}
                     style={{ marginTop: 11 }}
                   />
                 </>
@@ -186,6 +201,8 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
                   message={message}
                   actions={action.payload.actions || []}
                   location={location.concat(i)}
+                  activeDepth={activeDepth}
+                  currentDepth={currentDepth + 1}
                   onChange={onChange}
                 />
               )}
@@ -197,7 +214,10 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
           <Button
             variant="text"
             startIcon={<AddIcon />}
-            onClick={() => onChange.createAction(location)}
+            onClick={() => {
+              onChange.createAction(location);
+              onChange.setActiveDepth(currentDepth);
+            }}
           >
             New Action
           </Button>
