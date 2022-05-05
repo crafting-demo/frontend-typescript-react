@@ -21,7 +21,7 @@ export function Graph(params: GraphParams) {
           width: "100%",
           height: "100%",
           overflowY: "auto",
-          backgroundColor: colors.white[0],
+          backgroundColor: colors.white[100],
           "::-webkit-scrollbar": {
             width: "4px",
           },

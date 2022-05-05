@@ -42,5 +42,5 @@ export const InteractiveBlockWrapper = styled(Box)(() => ({
   marginTop: "20px",
   padding: "20px 5px",
   display: "block",
-  borderLeft: `3px solid ${colors.black[400]}`,
+  borderLeft: `3px solid ${colors.silver[100]}`,
 }));

@@ -1,12 +1,7 @@
 import { useState } from "react";
 
-import {
-  Send as SendIcon,
-  AddCircle as AddCircleIcon,
-  DeleteForever as DeleteForeverIcon,
-  CheckCircle as CheckCircleIcon,
-} from "@mui/icons-material";
-import { Snackbar, Alert, Button, ButtonGroup } from "@mui/material";
+import { Send as SendIcon } from "@mui/icons-material";
+import { Snackbar, Alert, Button, Box } from "@mui/material";
 
 import { Client } from "backend";
 import { emptyMessage, RandomMessage, ValidateMessage } from "common/helpers";
@@ -22,21 +17,10 @@ export function MessageBuilder() {
   const [errors, setErrors] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [active, setActive] = useState(-1);
+  const [generate, setGenerate] = useState(false);
+  const [clear, setClear] = useState(false);
   const [response, setResponse] = useState<Message | null>(null);
   const [launchGraph, setLaunchGraph] = useState(false);
-
-  const findCallee = (actions: Action[], location: number[]): string => {
-    if (!location.length) {
-      return message.meta.callee;
-    }
-    if (location.length === 1) {
-      return actions[location[0]]?.payload?.serviceName || "";
-    }
-    return findCallee(
-      actions[location[0]]?.payload?.actions || [],
-      location.slice(1)
-    );
-  };
 
   const createAction = (actions: Action[], location: number[]): Action[] => {
     if (!location.length) {
@@ -167,15 +151,12 @@ export function MessageBuilder() {
 
   const handleGenerate = () => {
     setMessage(RandomMessage());
-  };
-
-  const handleValidate = () => {
-    validateMessage();
-    handleOpenSnackbar();
+    setGenerate(!generate);
   };
 
   const handleClear = () => {
     setMessage(emptyMessage());
+    setClear(!clear);
   };
 
   const handleSend = async () => {
@@ -200,37 +181,20 @@ export function MessageBuilder() {
 
   return (
     <>
-      <ButtonGroup
-        orientation={mobile ? "vertical" : "horizontal"}
+      <Box
         sx={{
-          marginBottom: "20px",
+          display: "flex",
+          flexDirection: mobile ? "column" : "row",
+          marginBottom: "35px",
           "& button": {
             marginRight: "20px",
-            border: "none !important",
           },
         }}
       >
-        <Button
-          variant="outlined"
-          endIcon={<AddCircleIcon />}
-          onClick={handleGenerate}
-        >
+        <Button variant="text" onClick={handleGenerate}>
           Generate
         </Button>
-        <Button
-          variant="outlined"
-          endIcon={<CheckCircleIcon />}
-          onClick={handleValidate}
-          disabled={!message}
-        >
-          Validate
-        </Button>
-        <Button
-          variant="outlined"
-          endIcon={<DeleteForeverIcon />}
-          onClick={handleClear}
-          disabled={!message}
-        >
+        <Button variant="text" onClick={handleClear} disabled={!message}>
           Clear
         </Button>
         <Button
@@ -238,10 +202,11 @@ export function MessageBuilder() {
           endIcon={<SendIcon />}
           onClick={handleSend}
           disabled={!message}
+          sx={{ marginLeft: "10px" }}
         >
           Send
         </Button>
-      </ButtonGroup>
+      </Box>
 
       <InteractiveBuilder
         message={message}
@@ -249,8 +214,9 @@ export function MessageBuilder() {
         location={[]}
         activeDepth={active}
         currentDepth={0}
+        generate={generate}
+        clear={clear}
         onChange={{
-          findCallee,
           updateCallee: handleChangeCallee,
           createAction: handleCreateAction,
           updateActions: handleChangeActions,

@@ -52,6 +52,5 @@ export const AppWrapperName = styled(Typography)(() => ({
 export const AppDivider = styled(Divider)(() => ({
   maxWidth: "200px",
   margin: "40px 0",
-  color: colors.black[200],
-  borderColor: colors.black[400],
+  borderColor: colors.silver[100],
 }));

@@ -13,7 +13,7 @@ import {
 import { Box, Typography } from "@mui/material";
 import ReactTimeAgo from "react-time-ago";
 
-import { sortMessages, uniqueMessages } from "common/helpers";
+import { sortMessages, uniqueKey, uniqueMessages } from "common/helpers";
 import { Message, ServiceType } from "common/types";
 import { Graph } from "components/graph";
 import { Consumer } from "kafka";
@@ -54,7 +54,7 @@ export function TimelineBuilder() {
         .filter(uniqueMessages)
         .sort(sortMessages)
         .map((msg, i) => (
-          <TimelineItem>
+          <TimelineItem key={uniqueKey()}>
             <TimelineOppositeContent sx={{ display: "none" }} />
 
             <TimelineSeparator>
