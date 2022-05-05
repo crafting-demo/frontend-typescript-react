@@ -14,7 +14,7 @@ export function RandomMessage(): Message {
   return {
     meta: {
       caller: ServiceType.React,
-      callee: ServiceType.Gin, // RandomCallee()
+      callee: RandomPick([ServiceType.Gin, ServiceType.Express]), // RandomCallee()
     },
     actions: RandomActions(RandomPick()),
   };
@@ -68,7 +68,7 @@ export function RandomActionPayload(action: ActionType): Payload {
   }
 
   if (action === ActionType.Call) {
-    payload.serviceName = ServiceType.Gin; // RandomCallee()
+    payload.serviceName = RandomPick([ServiceType.Gin, ServiceType.Express]); // RandomCallee()
     payload.actions = RandomActions(RandomPick());
   }
 
