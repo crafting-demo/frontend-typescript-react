@@ -21,6 +21,7 @@ export function Graph(params: GraphParams) {
         sx={{
           width: "100%",
           height: "100%",
+          overflowX: "hidden",
           overflowY: "auto",
           backgroundColor: colors.white[100],
           ...ScrollbarSettings,

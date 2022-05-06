@@ -1,13 +1,15 @@
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Box } from "@mui/material";
-import Tree from "react-d3-tree";
+import { AnimatedTree } from "react-tree-graph";
 
+import { uniqueKey } from "common/helpers";
 import { Action, Message, ActionType } from "common/types";
+import { colors } from "styles";
 
 interface TreeData {
   name: string;
-  attributes?: Record<string, string | number | boolean>;
+  label: JSX.Element;
   children?: TreeData[];
 }
 
@@ -16,18 +18,40 @@ interface RenderParams {
 }
 
 export function Render(params: RenderParams) {
+  const wrapperRef = useRef<HTMLElement>(null);
+  const [windowWidth, setWindowWidth] = useState(1000);
+  const [windowHeight, setWindowHeight] = useState(1000);
+
   const { message } = params;
-  const treeContainerRef = useRef<HTMLElement>(null);
-  const [treeTranslate, setTreeTranslate] = useState({ x: 0, y: 0 });
+
+  const formatServiceName = (serviceName?: string): string => {
+    const parts = serviceName?.split("-");
+    if (!parts || parts.length < 3) {
+      return serviceName || "";
+    }
+    return `${parts
+      .slice(-1)
+      .map((x) => x.charAt(0).toUpperCase() + x.slice(1))}`;
+  };
 
   const treeData = (actions?: Action[]): TreeData[] => {
     if (!actions) {
       return [
         {
-          name: message.meta.caller,
+          name: uniqueKey(),
+          label: (
+            <text dx="-10" dy="-15" fill={colors.green[100]}>
+              React
+            </text>
+          ),
           children: [
             {
-              name: message.meta.callee,
+              name: uniqueKey(),
+              label: (
+                <text dx="-20" dy="-15" fill={colors.violet[100]}>
+                  {formatServiceName(message.meta.callee)}
+                </text>
+              ),
               children: treeData(message.actions),
             },
           ],
@@ -38,55 +62,91 @@ export function Render(params: RenderParams) {
       switch (action.action) {
         case ActionType.Echo:
           return {
-            name: "Echo",
+            name: uniqueKey(),
+            label: (
+              <text dx="5" fill={colors.pink[100]}>
+                Echo
+              </text>
+            ),
           };
         case ActionType.Read:
           return {
-            name: action.payload.serviceName || "",
+            name: uniqueKey(),
+            label: (
+              <text dx="5" fill={colors.pink[100]}>
+                {action.payload.serviceName}
+              </text>
+            ),
           };
         case ActionType.Write:
           return {
-            name: action.payload.serviceName || "",
+            name: uniqueKey(),
+            label: (
+              <text dx="5" fill={colors.pink[100]}>
+                {action.payload.serviceName}
+              </text>
+            ),
           };
         case ActionType.Call:
           return {
-            name: action.payload.serviceName || "",
+            name: uniqueKey(),
+            label: (
+              <text dx="-20" dy="-15" fill={colors.violet[100]}>
+                {formatServiceName(action.payload.serviceName)}
+              </text>
+            ),
             children: treeData(action.payload.actions),
           };
         default:
           break;
       }
       return {
-        name: "",
+        name: uniqueKey(),
+        label: <>Unknown</>,
       };
     });
   };
 
   useEffect(() => {
-    if (treeContainerRef.current) {
-      const dimensions = treeContainerRef.current.getBoundingClientRect();
-
-      setTreeTranslate({
-        x: dimensions.width / 2,
-        y: 100,
-      });
+    if (!wrapperRef.current) {
+      return;
     }
-  });
+    const dimensions = wrapperRef.current.getBoundingClientRect();
+    setWindowWidth(dimensions.width);
+    setWindowHeight(dimensions.height);
+  }, [wrapperRef.current]);
 
   return (
     <Box
-      ref={treeContainerRef}
+      ref={wrapperRef}
       sx={{
         display: "block",
         width: "100vw",
         height: "100vh",
+        "& .node": {
+          cursor: "pointer",
+        },
+        "& .node circle": {
+          fill: colors.white[100],
+          stroke: colors.violet[100],
+          strokeWidth: "4px",
+        },
+        "& .node text": {
+          fontSize: "14px",
+          fontWeight: "bold",
+        },
+        "& path.link": {
+          fill: "none",
+          stroke: colors.violet[100],
+          strokeWidth: "4px",
+        },
       }}
     >
-      <Tree
-        data={treeData()}
-        orientation="vertical"
-        collapsible={false}
-        translate={treeTranslate}
+      <AnimatedTree
+        data={treeData()[0]}
+        width={windowWidth}
+        height={windowHeight}
+        labelProp="label"
       />
     </Box>
   );

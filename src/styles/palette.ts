@@ -6,6 +6,9 @@ export const colors = {
     100: "#FCFCFE",
     200: "#F1F1F1",
   },
+  pink: {
+    100: "#EFA9AE",
+  },
   grey: {
     100: "#CCCCCC",
     200: "#BDBDBD",

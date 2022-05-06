@@ -20,9 +20,9 @@
     "javascript-time-ago": "^2.3.13",
     "lorem-ipsum": "^2.0.4",
     "react": "^18.0.0",
-    "react-d3-tree": "^3.3.2",
     "react-dom": "^18.0.0",
     "react-time-ago": "^7.1.9",
+    "react-tree-graph": "^7.0.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

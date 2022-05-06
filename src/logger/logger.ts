@@ -1,9 +1,10 @@
 export class Logger {
   public static write(source: string, desc: string, err: any) {
-    process.stdout.write(
+    // eslint-disable-next-line no-console
+    console.error(
       `${new Date().toLocaleString()} ${source}: ${desc}${
         err ? `: ${err}` : ""
-      }\n`
+      }`
     );
   }
 }
