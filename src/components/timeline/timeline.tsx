@@ -68,7 +68,7 @@ export function TimelineBuilder() {
           color: colors.black[100],
         }}
       >
-        Backend Call History
+        Requests Log.
       </Typography>
 
       <Timeline>
@@ -81,8 +81,20 @@ export function TimelineBuilder() {
           .sort(sortMessages)
           .map((msg, i) => (
             <TimelineItem key={uniqueKey()}>
-              <TimelineOppositeContent sx={{ paddingTop: "45px" }}>
-                <Typography>
+              <TimelineOppositeContent
+                sx={{
+                  paddingTop: "45px",
+                  overflow: "hidden",
+                }}
+              >
+                <Typography
+                  sx={{
+                    width: "100%",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                  }}
+                >
                   {msg.meta.callTime && (
                     <ReactTimeAgo date={Date.parse(msg.meta.callTime)} />
                   )}
@@ -153,13 +165,25 @@ export function TimelineBuilder() {
                   py: 0,
                   px: 2,
                   paddingTop: "45px",
+                  overflow: "hidden",
                 }}
               >
-                <Box onClick={handleOpenGraph(i)} sx={{ cursor: "pointer" }}>
+                <Box
+                  onClick={handleOpenGraph(i)}
+                  sx={{
+                    cursor: "pointer",
+                    width: "100%",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                  }}
+                >
                   <Typography
                     variant="h6"
                     component="span"
-                    sx={{ fontSize: "16px" }}
+                    sx={{
+                      fontSize: "16px",
+                    }}
                   >
                     {msg.meta.callee
                       .split("-")

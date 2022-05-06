@@ -2,6 +2,7 @@ import { Close as CloseIcon } from "@mui/icons-material";
 import { Box, Button, Modal } from "@mui/material";
 
 import { Message } from "common/types";
+import { ScrollbarSettings } from "components/common";
 import { Render } from "components/graph/render";
 import { colors } from "styles";
 
@@ -22,23 +23,12 @@ export function Graph(params: GraphParams) {
           height: "100%",
           overflowY: "auto",
           backgroundColor: colors.white[100],
-          "::-webkit-scrollbar": {
-            width: "4px",
-          },
-          "::-webkit-scrollbar-track": {
-            backgroundColor: "#F1F1F1",
-            borderRadius: "16px",
-          },
-          "::-webkit-scrollbar-thumb": {
-            background: "#CCCCCC",
-            borderRadius: "16px",
-          },
-          "::-webkit-scrollbar-thumb:hover": {
-            backgroundColor: "#BDBDBD",
-          },
+          ...ScrollbarSettings,
         }}
       >
         <Button
+          disableRipple
+          disableElevation
           color="inherit"
           onClick={onClose}
           sx={{

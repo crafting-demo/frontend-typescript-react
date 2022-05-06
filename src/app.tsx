@@ -21,7 +21,7 @@ export function App() {
       <AppContainer mobile={+mobile}>
         <AppWrapperMessage mobile={+mobile}>
           <AppWrapperName variant="h1">
-            Crafting Demo - Multi-lang Multi-service app.
+            Crafting Demo - multi-lang multi-service app.
           </AppWrapperName>
           <AppDivider />
           <MessageBuilder />

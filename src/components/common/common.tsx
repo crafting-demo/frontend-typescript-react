@@ -6,20 +6,7 @@ export const AppContainer = styled(Box)<BoxProps & { mobile?: number }>(
   ({ mobile }) => ({
     display: mobile ? "block" : "flex",
     "& div": {
-      "::-webkit-scrollbar": {
-        width: "4px",
-      },
-      "::-webkit-scrollbar-track": {
-        backgroundColor: "#F1F1F1",
-        borderRadius: "16px",
-      },
-      "::-webkit-scrollbar-thumb": {
-        background: "#CCCCCC",
-        borderRadius: "16px",
-      },
-      "::-webkit-scrollbar-thumb:hover": {
-        backgroundColor: "#BDBDBD",
-      },
+      ...ScrollbarSettings,
     },
   })
 );
@@ -52,5 +39,22 @@ export const AppWrapperName = styled(Typography)(() => ({
 export const AppDivider = styled(Divider)(() => ({
   maxWidth: "200px",
   margin: "40px 0",
-  borderColor: colors.silver[100],
+  borderColor: colors.white[200],
 }));
+
+export const ScrollbarSettings = {
+  "::-webkit-scrollbar": {
+    width: "4px",
+  },
+  "::-webkit-scrollbar-track": {
+    backgroundColor: colors.white[200],
+    borderRadius: "16px",
+  },
+  "::-webkit-scrollbar-thumb": {
+    background: colors.grey[100],
+    borderRadius: "16px",
+  },
+  "::-webkit-scrollbar-thumb:hover": {
+    backgroundColor: colors.grey[200],
+  },
+};
