@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { AnimatedTree } from "react-tree-graph";
 
 import { uniqueKey } from "common/helpers";
@@ -148,6 +148,23 @@ export function Render(params: RenderParams) {
         height={windowHeight}
         labelProp="label"
       />
+
+      <Typography
+        variant="caption"
+        sx={{
+          position: "absolute",
+          bottom: 20,
+          left: 20,
+          color: colors.violet[100],
+          fontWeight: "bold",
+        }}
+      >
+        Request completed in{" "}
+        {(Date.parse(message.meta.returnTime!) -
+          Date.parse(message.meta.callTime!)) /
+          1000}
+        s
+      </Typography>
     </Box>
   );
 }
