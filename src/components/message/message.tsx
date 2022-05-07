@@ -1,14 +1,10 @@
 import { useState } from "react";
 
 import { Send as SendIcon } from "@mui/icons-material";
-import { Snackbar, Alert, Button, Box } from "@mui/material";
+import { Button, Box } from "@mui/material";
 
 import { Client } from "backend";
-import {
-  emptyMessage,
-  RandomMessageCompact,
-  ValidateMessage,
-} from "common/helpers";
+import { emptyMessage, RandomMessageCompact } from "common/helpers";
 import { useMobile, useResponse } from "common/hooks";
 import { Action } from "common/types";
 import { InteractiveBuilder } from "components/message/interactive";
@@ -18,8 +14,6 @@ export function MessageBuilder() {
   const mobile = useMobile();
   const [message, setMessage] = useState(emptyMessage());
   const [, setResponse] = useResponse();
-  const [errors, setErrors] = useState("");
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [active, setActive] = useState(-1);
   const [generate, setGenerate] = useState(false);
   const [clear, setClear] = useState(false);
@@ -95,16 +89,6 @@ export function MessageBuilder() {
     });
   };
 
-  const validateMessage = (): boolean => {
-    const err = ValidateMessage(JSON.stringify(message));
-    if (err.length > 0) {
-      setErrors(`Error: ${err.join(", ")}`);
-      return false;
-    }
-    setErrors("");
-    return true;
-  };
-
   const handleChangeCallee = (value: string) => {
     setMessage({
       meta: {
@@ -133,20 +117,6 @@ export function MessageBuilder() {
     });
   };
 
-  const handleOpenSnackbar = () => {
-    setOpenSnackbar(true);
-  };
-
-  const handleCloseSnackbar = (
-    _event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSnackbar(false);
-  };
-
   const handleChangeActive = (depth: number) => {
     setActive(depth);
   };
@@ -162,11 +132,6 @@ export function MessageBuilder() {
   };
 
   const handleSend = async () => {
-    const valid = validateMessage();
-    if (!valid) {
-      handleOpenSnackbar();
-      return;
-    }
     const client = new Client(message.meta.callee);
     const resp = await client.makeServiceCall({
       meta: {
@@ -224,19 +189,6 @@ export function MessageBuilder() {
           setActiveDepth: handleChangeActive,
         }}
       />
-
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity={errors ? "error" : "success"}
-        >
-          {errors || "Validation passed"}
-        </Alert>
-      </Snackbar>
     </>
   );
 }
