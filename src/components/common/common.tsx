@@ -14,7 +14,7 @@ export const AppContainer = styled(Box)<BoxProps & { mobile?: number }>(
 export const AppWrapperMessage = styled(Box)<BoxProps & { mobile?: number }>(
   ({ mobile }) => ({
     overflowY: "scroll",
-    width: mobile ? "100%" : "60%",
+    width: mobile ? "100%" : "50%",
     minHeight: mobile ? "50vh" : "100vh",
     height: mobile ? "auto" : "100vh",
     padding: mobile ? "20px 10px" : "20px",
@@ -24,7 +24,7 @@ export const AppWrapperMessage = styled(Box)<BoxProps & { mobile?: number }>(
 export const AppWrapperTimeline = styled(Box)<BoxProps & { mobile?: number }>(
   ({ mobile }) => ({
     overflowY: "scroll",
-    width: mobile ? "100%" : "40%",
+    width: mobile ? "100%" : "50%",
     minHeight: mobile ? "50vh" : "100vh",
     height: mobile ? "auto" : "100vh",
   })
