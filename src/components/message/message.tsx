@@ -4,23 +4,25 @@ import { Send as SendIcon } from "@mui/icons-material";
 import { Snackbar, Alert, Button, Box } from "@mui/material";
 
 import { Client } from "backend";
-import { emptyMessage, RandomMessage, ValidateMessage } from "common/helpers";
-import { useMobile } from "common/hooks";
-import { Action, Message } from "common/types";
-import { Graph } from "components/graph";
+import {
+  emptyMessage,
+  RandomMessageCompact,
+  ValidateMessage,
+} from "common/helpers";
+import { useMobile, useResponse } from "common/hooks";
+import { Action } from "common/types";
 import { InteractiveBuilder } from "components/message/interactive";
 import { logger } from "logger";
 
 export function MessageBuilder() {
   const mobile = useMobile();
   const [message, setMessage] = useState(emptyMessage());
+  const [, setResponse] = useResponse();
   const [errors, setErrors] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [active, setActive] = useState(-1);
   const [generate, setGenerate] = useState(false);
   const [clear, setClear] = useState(false);
-  const [response, setResponse] = useState<Message | null>(null);
-  const [launchGraph, setLaunchGraph] = useState(false);
 
   const createAction = (actions: Action[], location: number[]): Action[] => {
     if (!location.length) {
@@ -150,7 +152,7 @@ export function MessageBuilder() {
   };
 
   const handleGenerate = () => {
-    setMessage(RandomMessage());
+    setMessage(RandomMessageCompact());
     setGenerate(!generate);
   };
 
@@ -175,7 +177,6 @@ export function MessageBuilder() {
     });
     if (resp) {
       setResponse(resp);
-      setLaunchGraph(true);
     }
   };
 
@@ -236,14 +237,6 @@ export function MessageBuilder() {
           {errors || "Validation passed"}
         </Alert>
       </Snackbar>
-
-      {response && (
-        <Graph
-          message={response}
-          open={launchGraph}
-          onClose={() => setLaunchGraph(false)}
-        />
-      )}
     </>
   );
 }

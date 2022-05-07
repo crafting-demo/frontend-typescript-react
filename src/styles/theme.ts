@@ -27,5 +27,14 @@ export const theme = createTheme({
         },
       },
     },
+    MuiPopover: {
+      styleOverrides: {
+        paper: {
+          boxShadow: "none",
+          border: `1px solid ${colors.white[200]}`,
+          backgroundColor: colors.white[100],
+        },
+      },
+    },
   },
 });

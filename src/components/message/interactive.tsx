@@ -8,9 +8,16 @@ import {
   FormControlLabel,
   Radio,
   Button,
+  MenuItem,
 } from "@mui/material";
 
-import { Action, Message, ActionType } from "common/types";
+import {
+  Action,
+  Message,
+  ActionType,
+  ServiceType,
+  DependencyType,
+} from "common/types";
 import {
   TextFieldInput,
   InteractiveBlockWrapper,
@@ -35,12 +42,12 @@ export interface InteractiveBuilderParams {
 }
 
 export function InteractiveBuilder(params: InteractiveBuilderParams) {
-  const [backendService, setBackendService] = useState("");
+  const [backendService, setBackendService] = useState(ServiceType.Gin);
 
   const handleChangeBackendService = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setBackendService(event.target.value);
+    setBackendService(event.target.value as ServiceType);
   };
 
   const {
@@ -65,11 +72,11 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
   };
 
   useEffect(() => {
-    setBackendService(findCallee(message.actions, location));
+    setBackendService(findCallee(message.actions, location) as ServiceType);
   }, [generate]);
 
   useEffect(() => {
-    setBackendService("");
+    setBackendService(ServiceType.Gin);
   }, [clear]);
 
   return (
@@ -77,6 +84,7 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
       <Box sx={{ width: "100%" }}>
         <TextFieldInput
           label="Backend service"
+          select
           variant="filled"
           value={backendService}
           onChange={handleChangeBackendService}
@@ -91,7 +99,15 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
           }
           onFocus={() => onChange.setActiveDepth(currentDepth)}
           style={{ marginTop: 11 }}
-        />
+        >
+          {Object.values(ServiceType)
+            .filter((value) => value !== ServiceType.React)
+            .map((value) => (
+              <MenuItem key={value} value={value}>
+                {value}
+              </MenuItem>
+            ))}
+        </TextFieldInput>
       </Box>
 
       <InteractiveBlockWrapper
@@ -156,9 +172,7 @@ export function InteractiveBlock(params: InteractiveBlockParams) {
     onChange,
   } = params;
 
-  const [serviceName, setServiceName] = useState(
-    action.payload.serviceName || ""
-  );
+  const [serviceName, setServiceName] = useState(DependencyType.MySQL);
   const [key, setKey] = useState(action.payload.key || "");
   const [value, setValue] = useState(action.payload.value || "");
   const [trackGenerate, setTrackGenerate] = useState(false);
@@ -166,7 +180,7 @@ export function InteractiveBlock(params: InteractiveBlockParams) {
   const handleChangeServiceName = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setServiceName(event.target.value);
+    setServiceName(event.target.value as DependencyType);
   };
 
   const handleChangeKey = (
@@ -183,7 +197,9 @@ export function InteractiveBlock(params: InteractiveBlockParams) {
 
   useEffect(() => {
     setTrackGenerate(generate);
-    setServiceName(action.payload.serviceName || "");
+    setServiceName(
+      (action.payload.serviceName as DependencyType) || DependencyType.MySQL
+    );
     setKey(action.payload.key || "");
     setValue(action.payload.value || "");
   }, [generate]);
@@ -248,6 +264,7 @@ export function InteractiveBlock(params: InteractiveBlockParams) {
         {action.action === ActionType.Read && (
           <>
             <TextFieldInput
+              select
               label="Entity store"
               variant="filled"
               value={serviceName}
@@ -261,7 +278,13 @@ export function InteractiveBlock(params: InteractiveBlockParams) {
               }
               onFocus={() => onChange.setActiveDepth(currentDepth)}
               style={{ marginTop: 11 }}
-            />
+            >
+              {Object.values(DependencyType).map((val) => (
+                <MenuItem key={val} value={val}>
+                  {val}
+                </MenuItem>
+              ))}
+            </TextFieldInput>
             <TextFieldInput
               label="Key"
               variant="filled"
@@ -283,6 +306,7 @@ export function InteractiveBlock(params: InteractiveBlockParams) {
         {action.action === ActionType.Write && (
           <>
             <TextFieldInput
+              select
               label="Entity store"
               variant="filled"
               value={serviceName}
@@ -296,7 +320,13 @@ export function InteractiveBlock(params: InteractiveBlockParams) {
               }
               onFocus={() => onChange.setActiveDepth(currentDepth)}
               style={{ marginTop: 11 }}
-            />
+            >
+              {Object.values(DependencyType).map((val) => (
+                <MenuItem key={val} value={val}>
+                  {val}
+                </MenuItem>
+              ))}
+            </TextFieldInput>
             <TextFieldInput
               label="Key"
               variant="filled"

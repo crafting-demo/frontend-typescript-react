@@ -9,7 +9,7 @@ import {
   AppDivider,
 } from "components/common";
 import { MessageBuilder } from "components/message";
-import { TimelineBuilder } from "components/timeline";
+import { ResponseBuilder } from "components/response";
 
 export function App() {
   const mobile = useMobile();
@@ -28,7 +28,7 @@ export function App() {
         </AppWrapperMessage>
 
         <AppWrapperTimeline mobile={+mobile}>
-          <TimelineBuilder />
+          <ResponseBuilder />
         </AppWrapperTimeline>
       </AppContainer>
     </>

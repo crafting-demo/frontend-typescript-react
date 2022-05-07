@@ -14,9 +14,37 @@ export function RandomMessage(): Message {
   return {
     meta: {
       caller: ServiceType.React,
-      callee: RandomPick([ServiceType.Gin, ServiceType.Express]), // RandomCallee()
+      callee: RandomCallee(),
     },
     actions: RandomActions(RandomPick()),
+  };
+}
+
+export function RandomMessageCompact(): Message {
+  const callAction = RandomPick(
+    Object.values(ActionType).filter((x) => x !== ActionType.Call)
+  );
+  return {
+    meta: {
+      caller: ServiceType.React,
+      callee: RandomCallee(),
+    },
+    actions: [
+      RandomAction(true),
+      RandomAction(true),
+      {
+        action: ActionType.Call,
+        payload: {
+          serviceName: RandomCallee(),
+          actions: [
+            {
+              action: callAction,
+              payload: RandomActionPayload(callAction),
+            },
+          ],
+        },
+      },
+    ],
   };
 }
 
@@ -34,8 +62,10 @@ export function RandomActions(size: number): Action[] {
   return actions;
 }
 
-export function RandomAction(): Action {
-  const action = RandomPick(Object.values(ActionType));
+export function RandomAction(withoutCall?: boolean): Action {
+  const action = withoutCall
+    ? RandomPick(Object.values(ActionType).filter((x) => x !== ActionType.Call))
+    : RandomPick(Object.values(ActionType));
   return {
     action,
     payload: RandomActionPayload(action),
@@ -68,7 +98,7 @@ export function RandomActionPayload(action: ActionType): Payload {
   }
 
   if (action === ActionType.Call) {
-    payload.serviceName = RandomPick([ServiceType.Gin, ServiceType.Express]); // RandomCallee()
+    payload.serviceName = RandomCallee();
     payload.actions = RandomActions(RandomPick());
   }
 
@@ -78,11 +108,4 @@ export function RandomActionPayload(action: ActionType): Payload {
 export function RandomPick(sample?: any[]): any {
   const a = sample || [1, 2, 3, 4, 5];
   return a[Math.floor(Math.random() * a.length)];
-}
-
-export function RandomMessageString(noSpace?: boolean): string {
-  const randomMsg = RandomMessage();
-  return noSpace
-    ? JSON.stringify(randomMsg)
-    : JSON.stringify(randomMsg, null, 2);
 }
