@@ -5,8 +5,6 @@ import {
   AppContainer,
   AppWrapperMessage,
   AppWrapperTimeline,
-  AppWrapperName,
-  AppDivider,
 } from "components/common";
 import { MessageBuilder } from "components/message";
 import { ResponseBuilder } from "components/response";
@@ -20,10 +18,6 @@ export function App() {
 
       <AppContainer mobile={+mobile}>
         <AppWrapperMessage mobile={+mobile}>
-          <AppWrapperName variant="h1">
-            Crafting Demo - multi-lang multi-service app.
-          </AppWrapperName>
-          <AppDivider />
           <MessageBuilder />
         </AppWrapperMessage>
 

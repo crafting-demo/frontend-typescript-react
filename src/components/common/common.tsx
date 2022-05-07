@@ -1,4 +1,4 @@
-import { Box, BoxProps, Divider, styled, Typography } from "@mui/material";
+import { Box, BoxProps, styled } from "@mui/material";
 
 import { colors } from "styles";
 
@@ -17,7 +17,7 @@ export const AppWrapperMessage = styled(Box)<BoxProps & { mobile?: number }>(
     width: mobile ? "100%" : "50%",
     minHeight: mobile ? "50vh" : "100vh",
     height: mobile ? "auto" : "100vh",
-    padding: mobile ? "20px 10px" : "20px",
+    padding: "20px",
   })
 );
 
@@ -27,20 +27,9 @@ export const AppWrapperTimeline = styled(Box)<BoxProps & { mobile?: number }>(
     width: mobile ? "100%" : "50%",
     minHeight: mobile ? "50vh" : "100vh",
     height: mobile ? "auto" : "100vh",
+    padding: "20px",
   })
 );
-
-export const AppWrapperName = styled(Typography)(() => ({
-  fontSize: "30px",
-  margin: "25px 0",
-  color: colors.black[100],
-}));
-
-export const AppDivider = styled(Divider)(() => ({
-  maxWidth: "200px",
-  margin: "40px 0",
-  borderColor: colors.white[200],
-}));
 
 export const ScrollbarSettings = {
   "::-webkit-scrollbar": {
