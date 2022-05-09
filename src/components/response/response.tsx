@@ -5,5 +5,12 @@ import { useResponse } from "common/hooks";
 export function ResponseBuilder() {
   const [response] = useResponse();
 
-  return <ReactJson name="response" src={response} displayDataTypes={false} />;
+  return (
+    <ReactJson
+      name="response"
+      src={response}
+      displayDataTypes={false}
+      displayObjectSize={false}
+    />
+  );
 }
