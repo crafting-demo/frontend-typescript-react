@@ -46,7 +46,7 @@ export function MessageBuilder() {
     location: number[]
   ): Action[] => {
     if (!location.length) {
-      logger.write("MessageBuilder", "missing location data", null);
+      logger.WriteError("MessageBuilder", "missing location data", null);
       return [];
     }
     if (location.length === 1) {

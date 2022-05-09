@@ -37,7 +37,7 @@ export class Client {
     });
     if (!resp.ok) {
       const err = await resp.json();
-      logger.write(
+      logger.WriteError(
         "makeServiceCall",
         "failed to make service call",
         JSON.stringify(err)

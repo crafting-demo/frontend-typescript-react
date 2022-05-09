@@ -35,7 +35,7 @@ export class Consumer {
     };
 
     this.consumer.onclose = (event) => {
-      logger.write(
+      logger.WriteError(
         "consumer",
         "closing socket, attempting reconnect in 250ms",
         event.reason
@@ -47,7 +47,7 @@ export class Consumer {
     };
 
     this.consumer.onerror = (event) => {
-      logger.write("consumer", "encountered socket error", event);
+      logger.WriteError("consumer", "encountered socket error", event);
       this.consumer?.close();
     };
   }
