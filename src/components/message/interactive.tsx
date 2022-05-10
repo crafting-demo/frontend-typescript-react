@@ -42,14 +42,6 @@ export interface InteractiveBuilderParams {
 }
 
 export function InteractiveBuilder(params: InteractiveBuilderParams) {
-  const [backendService, setBackendService] = useState(ServiceType.Gin);
-
-  const handleChangeBackendService = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setBackendService(event.target.value as ServiceType);
-  };
-
   const {
     message,
     actions,
@@ -61,6 +53,14 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
     onChange,
   } = params;
 
+  const [backendService, setBackendService] = useState(ServiceType.Gin);
+
+  const handleChangeBackendService = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setBackendService(event.target.value as ServiceType);
+  };
+
   const findCallee = (acts: Action[], locs: number[]): string => {
     if (!locs.length) {
       return message.meta.callee;
@@ -70,6 +70,14 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
     }
     return findCallee(acts[locs[0]]?.payload?.actions || [], locs.slice(1));
   };
+
+  useEffect(() => {
+    if (!location.length) {
+      onChange.updateCallee(backendService);
+    } else {
+      onChange.updateActions("payload.serviceName", backendService, location);
+    }
+  }, []);
 
   useEffect(() => {
     setBackendService(findCallee(message.actions, location) as ServiceType);
@@ -194,6 +202,22 @@ export function InteractiveBlock(params: InteractiveBlockParams) {
   ) => {
     setValue(event.target.value);
   };
+
+  useEffect(() => {
+    if (
+      action.action !== ActionType.Read &&
+      action.action !== ActionType.Write
+    ) {
+      return;
+    }
+    if (!action.payload.serviceName) {
+      onChange.updateActions(
+        "payload.serviceName",
+        serviceName,
+        location.concat(index)
+      );
+    }
+  }, [action.action]);
 
   useEffect(() => {
     setTrackGenerate(generate);
