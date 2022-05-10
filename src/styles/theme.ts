@@ -20,13 +20,6 @@ export const theme = createTheme({
         },
       },
     },
-    MuiTimeline: {
-      styleOverrides: {
-        root: {
-          backgroundColor: "transparent",
-        },
-      },
-    },
     MuiPopover: {
       styleOverrides: {
         paper: {
