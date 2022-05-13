@@ -21,10 +21,7 @@ export enum ServiceType {
 
 export enum DependencyType {
   MySQL = "mysql",
-  Postgres = "postgres",
   MongoDB = "mongodb",
-  DynamoDB = "dynamodb",
-  Redis = "redis",
 }
 
 export interface Message {
