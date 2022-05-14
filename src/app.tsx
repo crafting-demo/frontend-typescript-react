@@ -4,7 +4,7 @@ import { useMobile } from "common/hooks";
 import {
   AppContainer,
   AppWrapperMessage,
-  AppWrapperTimeline,
+  AppWrapperResponse,
 } from "components/common";
 import { MessageBuilder } from "components/message";
 import { ResponseBuilder } from "components/response";
@@ -21,9 +21,9 @@ export function App() {
           <MessageBuilder />
         </AppWrapperMessage>
 
-        <AppWrapperTimeline mobile={+mobile}>
+        <AppWrapperResponse mobile={+mobile}>
           <ResponseBuilder />
-        </AppWrapperTimeline>
+        </AppWrapperResponse>
       </AppContainer>
     </>
   );

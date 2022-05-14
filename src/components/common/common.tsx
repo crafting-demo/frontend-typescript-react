@@ -21,7 +21,7 @@ export const AppWrapperMessage = styled(Box)<BoxProps & { mobile?: number }>(
   })
 );
 
-export const AppWrapperTimeline = styled(Box)<BoxProps & { mobile?: number }>(
+export const AppWrapperResponse = styled(Box)<BoxProps & { mobile?: number }>(
   ({ mobile }) => ({
     overflowY: "scroll",
     width: mobile ? "100%" : "50%",
