@@ -5,7 +5,7 @@ export class Client {
   private url: string;
 
   constructor(serviceType: string) {
-    const suffix = `${process.env.REACT_APP_DNS_SUFFIX}`;
+    const suffix = `${process.env.REACT_APP_DNS_SUFFIX}/api`;
     switch (serviceType) {
       case ServiceType.Gin:
         this.url = `https://gin${suffix}`;
@@ -37,10 +37,10 @@ export class Client {
     });
     if (!resp.ok) {
       const err = await resp.json();
-      logger.write(
+      logger.WriteError(
         "makeServiceCall",
-        "encountered error when making service call",
-        err
+        "failed to make service call",
+        JSON.stringify(err)
       );
       return null;
     }

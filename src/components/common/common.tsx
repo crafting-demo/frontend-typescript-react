@@ -1,4 +1,4 @@
-import { Box, BoxProps, Divider, styled, Typography } from "@mui/material";
+import { Box, BoxProps, styled } from "@mui/material";
 
 import { colors } from "styles";
 
@@ -6,20 +6,7 @@ export const AppContainer = styled(Box)<BoxProps & { mobile?: number }>(
   ({ mobile }) => ({
     display: mobile ? "block" : "flex",
     "& div": {
-      "::-webkit-scrollbar": {
-        width: "4px",
-      },
-      "::-webkit-scrollbar-track": {
-        backgroundColor: "#F1F1F1",
-        borderRadius: "16px",
-      },
-      "::-webkit-scrollbar-thumb": {
-        background: "#CCCCCC",
-        borderRadius: "16px",
-      },
-      "::-webkit-scrollbar-thumb:hover": {
-        backgroundColor: "#BDBDBD",
-      },
+      ...ScrollbarSettings,
     },
   })
 );
@@ -27,31 +14,36 @@ export const AppContainer = styled(Box)<BoxProps & { mobile?: number }>(
 export const AppWrapperMessage = styled(Box)<BoxProps & { mobile?: number }>(
   ({ mobile }) => ({
     overflowY: "scroll",
-    width: mobile ? "100%" : "60%",
+    width: mobile ? "100%" : "50%",
     minHeight: mobile ? "50vh" : "100vh",
     height: mobile ? "auto" : "100vh",
-    padding: mobile ? "20px 10px" : "20px",
+    padding: "20px",
   })
 );
 
-export const AppWrapperTimeline = styled(Box)<BoxProps & { mobile?: number }>(
+export const AppWrapperResponse = styled(Box)<BoxProps & { mobile?: number }>(
   ({ mobile }) => ({
     overflowY: "scroll",
-    width: mobile ? "100%" : "40%",
+    width: mobile ? "100%" : "50%",
     minHeight: mobile ? "50vh" : "100vh",
     height: mobile ? "auto" : "100vh",
+    padding: "20px",
   })
 );
 
-export const AppWrapperName = styled(Typography)(() => ({
-  fontSize: "30px",
-  margin: "25px 0",
-  color: colors.black[100],
-}));
-
-export const AppDivider = styled(Divider)(() => ({
-  maxWidth: "200px",
-  margin: "40px 0",
-  color: colors.black[200],
-  borderColor: colors.black[400],
-}));
+export const ScrollbarSettings = {
+  "::-webkit-scrollbar": {
+    width: "4px",
+  },
+  "::-webkit-scrollbar-track": {
+    backgroundColor: colors.white[200],
+    borderRadius: "16px",
+  },
+  "::-webkit-scrollbar-thumb": {
+    background: colors.grey[100],
+    borderRadius: "16px",
+  },
+  "::-webkit-scrollbar-thumb:hover": {
+    backgroundColor: colors.grey[200],
+  },
+};

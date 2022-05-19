@@ -26,7 +26,7 @@ export class Producer {
     };
 
     this.producer.onerror = (event) => {
-      logger.write("producer", "encountered socket error", event);
+      logger.WriteError("producer", "encountered socket error", event);
       this.producer?.close();
     };
   }

@@ -1,19 +1,28 @@
 export const colors = {
   black: {
-    0: "#000000",
-    100: "#30363D",
-    200: "#616161",
-    300: "#9E9E9E",
-    400: "#EAECEF",
+    100: "#090C08",
   },
   white: {
-    0: "#FFFFFF",
     100: "#FCFCFE",
+    200: "#F1F1F1",
   },
-  purple: {
-    100: "#6200EE",
+  pink: {
+    100: "#EFA9AE",
   },
-  teal: {
-    100: "#03DAC5",
+  grey: {
+    100: "#CCCCCC",
+    200: "#BDBDBD",
+  },
+  violet: {
+    100: "#474056",
+  },
+  rhythm: {
+    100: "#757083",
+  },
+  silver: {
+    100: "#8A95A5",
+  },
+  green: {
+    100: "#B9C6AE",
   },
 };

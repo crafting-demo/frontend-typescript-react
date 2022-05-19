@@ -4,12 +4,10 @@ import { useMobile } from "common/hooks";
 import {
   AppContainer,
   AppWrapperMessage,
-  AppWrapperTimeline,
-  AppWrapperName,
-  AppDivider,
+  AppWrapperResponse,
 } from "components/common";
 import { MessageBuilder } from "components/message";
-import { TimelineBuilder } from "components/timeline";
+import { ResponseBuilder } from "components/response";
 
 export function App() {
   const mobile = useMobile();
@@ -20,16 +18,12 @@ export function App() {
 
       <AppContainer mobile={+mobile}>
         <AppWrapperMessage mobile={+mobile}>
-          <AppWrapperName variant="h1">
-            Crafting Demo - Multi-lang Multi-service app.
-          </AppWrapperName>
-          <AppDivider />
           <MessageBuilder />
         </AppWrapperMessage>
 
-        <AppWrapperTimeline mobile={+mobile}>
-          <TimelineBuilder />
-        </AppWrapperTimeline>
+        <AppWrapperResponse mobile={+mobile}>
+          <ResponseBuilder />
+        </AppWrapperResponse>
       </AppContainer>
     </>
   );
