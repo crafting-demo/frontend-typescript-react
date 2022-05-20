@@ -4,7 +4,7 @@ import { Send as SendIcon } from "@mui/icons-material";
 import { Button, Box } from "@mui/material";
 
 import { Client } from "backend";
-import { emptyMessage, RandomMessageCompact } from "common/helpers";
+import { emptyMessage, RandomMessageChained } from "common/helpers";
 import { useMobile, useResponse } from "common/hooks";
 import { Action } from "common/types";
 import { InteractiveBuilder } from "components/message/interactive";
@@ -122,7 +122,7 @@ export function MessageBuilder() {
   };
 
   const handleGenerate = () => {
-    setMessage(RandomMessageCompact());
+    setMessage(RandomMessageChained());
     setGenerate(!generate);
   };
 

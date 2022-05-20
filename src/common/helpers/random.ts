@@ -20,26 +20,46 @@ export function RandomMessage(): Message {
   };
 }
 
-export function RandomMessageCompact(): Message {
-  const callAction = RandomPick(
-    Object.values(ActionType).filter((x) => x !== ActionType.Call)
-  );
+export function RandomMessageChained(): Message {
+  const action = RandomPick(["Read", "Write"]);
   return {
     meta: {
       caller: ServiceType.React,
-      callee: RandomCallee(),
+      callee: ServiceType.Gin,
     },
     actions: [
-      RandomAction(true),
-      RandomAction(true),
       {
         action: ActionType.Call,
         payload: {
-          serviceName: RandomCallee(),
+          serviceName: ServiceType.Express,
           actions: [
             {
-              action: callAction,
-              payload: RandomActionPayload(callAction),
+              action: ActionType.Call,
+              payload: {
+                serviceName: ServiceType.Rails,
+                actions: [
+                  {
+                    action: ActionType.Call,
+                    payload: {
+                      serviceName: ServiceType.Django,
+                      actions: [
+                        {
+                          action: ActionType.Call,
+                          payload: {
+                            serviceName: ServiceType.Spring,
+                            actions: [
+                              {
+                                action: action,
+                                payload: RandomPayloadReadWrite(action),
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
             },
           ],
         },
@@ -102,6 +122,28 @@ export function RandomActionPayload(action: ActionType): Payload {
     payload.actions = RandomActions(RandomPick());
   }
 
+  return payload;
+}
+
+export function RandomPayloadReadWrite(action: ActionType): Payload {
+  const lorem = new LoremIpsum({
+    wordsPerSentence: {
+      max: 10,
+      min: 5,
+    },
+  });
+
+  const payload: Payload = {};
+  if (action === ActionType.Read) {
+    payload.serviceName = RandomPick(Object.values(DependencyType));
+    payload.key = uuidv4();
+  }
+
+  if (action === ActionType.Write) {
+    payload.serviceName = RandomPick(Object.values(DependencyType));
+    payload.key = uuidv4();
+    payload.value = lorem.generateSentences(1);
+  }
   return payload;
 }
 
