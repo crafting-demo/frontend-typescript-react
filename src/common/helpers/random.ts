@@ -49,7 +49,7 @@ export function RandomMessageChained(): Message {
                             serviceName: ServiceType.Spring,
                             actions: [
                               {
-                                action: action,
+                                action,
                                 payload: RandomPayloadReadWrite(action),
                               },
                             ],
