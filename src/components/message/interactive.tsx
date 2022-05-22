@@ -376,21 +376,3 @@ export function InteractiveBlock({
     </Box>
   );
 }
-
-// const findCallee = (
-//   message: Message,
-//   actions: Action[],
-//   location: number[]
-// ): string => {
-//   if (!location.length) {
-//     return message.meta.callee;
-//   }
-//   if (location.length === 1) {
-//     return actions[location[0]]?.payload?.serviceName || "";
-//   }
-//   return findCallee(
-//     message,
-//     actions[location[0]]?.payload?.actions || [],
-//     location.slice(1)
-//   );
-// };

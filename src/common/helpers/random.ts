@@ -70,22 +70,16 @@ export function RandomMessageChained(): Message {
 }
 
 export function RandomPayloadReadWrite(action: ActionType): Payload {
-  const lorem = new LoremIpsum({
-    wordsPerSentence: {
-      max: 10,
-      min: 5,
-    },
-  });
-
   const payload: Payload = {};
-  if (action === ActionType.Read) {
-    payload.serviceName = RandomPick(Object.values(DependencyType));
-    payload.key = uuidv4();
-  }
-
+  payload.serviceName = RandomPick(Object.values(DependencyType));
+  payload.key = uuidv4();
   if (action === ActionType.Write) {
-    payload.serviceName = RandomPick(Object.values(DependencyType));
-    payload.key = uuidv4();
+    const lorem = new LoremIpsum({
+      wordsPerSentence: {
+        max: 10,
+        min: 5,
+      },
+    });
     payload.value = lorem.generateSentences(1);
   }
   return payload;
