@@ -1,10 +1,11 @@
 import { useState } from "react";
 
 import { Send as SendIcon } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import { Button, Box } from "@mui/material";
 
 import { Client } from "backend";
-import { emptyMessage, RandomMessageCompact } from "common/helpers";
+import { emptyMessage, RandomMessageChained } from "common/helpers";
 import { useMobile, useResponse } from "common/hooks";
 import { Action } from "common/types";
 import { InteractiveBuilder } from "components/message/interactive";
@@ -14,6 +15,7 @@ export function MessageBuilder() {
   const mobile = useMobile();
   const [message, setMessage] = useState(emptyMessage());
   const [, setResponse] = useResponse();
+  const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(-1);
   const [generate, setGenerate] = useState(false);
   const [clear, setClear] = useState(false);
@@ -122,7 +124,7 @@ export function MessageBuilder() {
   };
 
   const handleGenerate = () => {
-    setMessage(RandomMessageCompact());
+    setMessage(RandomMessageChained());
     setGenerate(!generate);
   };
 
@@ -132,6 +134,8 @@ export function MessageBuilder() {
   };
 
   const handleSend = async () => {
+    setLoading(true);
+
     const client = new Client(message.meta.callee);
     const resp = await client.makeServiceCall({
       meta: {
@@ -141,6 +145,7 @@ export function MessageBuilder() {
       actions: message.actions,
     });
     if (resp) {
+      setLoading(false);
       setResponse(resp);
     }
   };
@@ -163,15 +168,17 @@ export function MessageBuilder() {
         <Button variant="text" onClick={handleClear} disabled={!message}>
           Clear
         </Button>
-        <Button
-          variant="contained"
-          endIcon={<SendIcon />}
+        <LoadingButton
           onClick={handleSend}
+          endIcon={<SendIcon />}
+          loading={loading}
+          loadingPosition="end"
+          variant="contained"
           disabled={!message}
           sx={{ marginLeft: "10px" }}
         >
           Send
-        </Button>
+        </LoadingButton>
       </Box>
 
       <InteractiveBuilder
