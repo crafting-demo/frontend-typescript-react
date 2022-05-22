@@ -20,77 +20,6 @@ export function MessageBuilder() {
   const [generate, setGenerate] = useState(false);
   const [clear, setClear] = useState(false);
 
-  const createAction = (actions: Action[], location: number[]): Action[] => {
-    if (!location.length) {
-      return [...actions, { action: "", payload: {} }];
-    }
-    return actions.map((action, i) => {
-      if (i === location[0]) {
-        return {
-          ...action,
-          payload: {
-            ...action.payload,
-            actions: createAction(
-              action.payload.actions || [],
-              location.slice(1)
-            ),
-          },
-        };
-      }
-      return action;
-    });
-  };
-
-  const updateActions = (
-    actions: Action[],
-    attr: string,
-    value: string,
-    location: number[]
-  ): Action[] => {
-    if (!location.length) {
-      logger.WriteError("MessageBuilder", "missing location data", null);
-      return [];
-    }
-    if (location.length === 1) {
-      return actions.map((action, i) => {
-        if (i === location[0]) {
-          const attrs = attr.split(".");
-          if (attrs.length === 1) {
-            return {
-              ...action,
-              [attr]: value,
-            };
-          }
-          return {
-            ...action,
-            payload: {
-              ...action.payload,
-              [attrs[1]]: value,
-            },
-          };
-        }
-        return action;
-      });
-    }
-    return actions.map((action, i) => {
-      if (i === location[0]) {
-        return {
-          ...action,
-          payload: {
-            ...action.payload,
-            actions: updateActions(
-              action.payload.actions || [],
-              attr,
-              value,
-              location.slice(1)
-            ),
-          },
-        };
-      }
-      return action;
-    });
-  };
-
   const handleChangeCallee = (value: string) => {
     setMessage({
       meta: {
@@ -184,6 +113,7 @@ export function MessageBuilder() {
       <InteractiveBuilder
         message={message}
         actions={message.actions}
+        callee={message.meta.callee}
         location={[]}
         activeDepth={active}
         currentDepth={0}
@@ -199,3 +129,74 @@ export function MessageBuilder() {
     </>
   );
 }
+
+const createAction = (actions: Action[], location: number[]): Action[] => {
+  if (!location.length) {
+    return [...actions, { action: "", payload: {} }];
+  }
+  return actions.map((action, i) => {
+    if (i === location[0]) {
+      return {
+        ...action,
+        payload: {
+          ...action.payload,
+          actions: createAction(
+            action.payload.actions || [],
+            location.slice(1)
+          ),
+        },
+      };
+    }
+    return action;
+  });
+};
+
+const updateActions = (
+  actions: Action[],
+  attr: string,
+  value: string,
+  location: number[]
+): Action[] => {
+  if (!location.length) {
+    logger.WriteError("MessageBuilder", "missing location data", null);
+    return [];
+  }
+  if (location.length === 1) {
+    return actions.map((action, i) => {
+      if (i === location[0]) {
+        const attrs = attr.split(".");
+        if (attrs.length === 1) {
+          return {
+            ...action,
+            [attr]: value,
+          };
+        }
+        return {
+          ...action,
+          payload: {
+            ...action.payload,
+            [attrs[1]]: value,
+          },
+        };
+      }
+      return action;
+    });
+  }
+  return actions.map((action, i) => {
+    if (i === location[0]) {
+      return {
+        ...action,
+        payload: {
+          ...action.payload,
+          actions: updateActions(
+            action.payload.actions || [],
+            attr,
+            value,
+            location.slice(1)
+          ),
+        },
+      };
+    }
+    return action;
+  });
+};

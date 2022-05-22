@@ -33,6 +33,7 @@ export interface UpdateMessageMethods {
 export interface InteractiveBuilderParams {
   message: Message;
   actions: Action[];
+  callee: string | undefined;
   location: number[];
   activeDepth: number;
   currentDepth: number;
@@ -41,51 +42,45 @@ export interface InteractiveBuilderParams {
   onChange: UpdateMessageMethods;
 }
 
-export function InteractiveBuilder(params: InteractiveBuilderParams) {
-  const {
-    message,
-    actions,
-    location,
-    activeDepth,
-    currentDepth,
-    generate,
-    clear,
-    onChange,
-  } = params;
+export function InteractiveBuilder({
+  message,
+  actions,
+  callee,
+  location,
+  activeDepth,
+  currentDepth,
+  generate,
+  clear,
+  onChange,
+}: InteractiveBuilderParams) {
+  const [backendService, setBackendService] = useState(
+    callee ? (callee as ServiceType) : ServiceType.Gin
+  );
 
-  const [backendService, setBackendService] = useState(ServiceType.Gin);
+  const handleUpdateBackendService = (serviceType: ServiceType) => {
+    setBackendService(serviceType);
+    if (!location.length) {
+      onChange.updateCallee(serviceType);
+    } else {
+      onChange.updateActions("payload.serviceName", serviceType, location);
+    }
+  };
 
   const handleChangeBackendService = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setBackendService(event.target.value as ServiceType);
-  };
-
-  const findCallee = (acts: Action[], locs: number[]): string => {
-    if (!locs.length) {
-      return message.meta.callee;
-    }
-    if (locs.length === 1) {
-      return acts[locs[0]]?.payload?.serviceName || "";
-    }
-    return findCallee(acts[locs[0]]?.payload?.actions || [], locs.slice(1));
+    handleUpdateBackendService(event.target.value as ServiceType);
   };
 
   useEffect(() => {
-    if (!location.length) {
-      onChange.updateCallee(backendService);
-    } else {
-      onChange.updateActions("payload.serviceName", backendService, location);
+    if (!callee) {
+      handleUpdateBackendService(ServiceType.Gin);
+      return;
     }
-  }, []);
-
-  useEffect(() => {
-    setBackendService(findCallee(message.actions, location) as ServiceType);
-  }, [generate]);
-
-  useEffect(() => {
-    setBackendService(ServiceType.Gin);
-  }, [clear]);
+    if (callee !== backendService) {
+      handleUpdateBackendService(callee as ServiceType);
+    }
+  }, [callee]);
 
   return (
     <>
@@ -96,15 +91,6 @@ export function InteractiveBuilder(params: InteractiveBuilderParams) {
           variant="filled"
           value={backendService}
           onChange={handleChangeBackendService}
-          onBlur={() =>
-            !location.length
-              ? onChange.updateCallee(backendService)
-              : onChange.updateActions(
-                  "payload.serviceName",
-                  backendService,
-                  location
-                )
-          }
           onFocus={() => onChange.setActiveDepth(currentDepth)}
           style={{ marginTop: 11 }}
         >
@@ -167,28 +153,35 @@ export interface InteractiveBlockParams {
   onChange: UpdateMessageMethods;
 }
 
-export function InteractiveBlock(params: InteractiveBlockParams) {
-  const {
-    message,
-    action,
-    index,
-    location,
-    activeDepth,
-    currentDepth,
-    generate,
-    clear,
-    onChange,
-  } = params;
-
+export function InteractiveBlock({
+  message,
+  action,
+  index,
+  location,
+  activeDepth,
+  currentDepth,
+  generate,
+  clear,
+  onChange,
+}: InteractiveBlockParams) {
   const [serviceName, setServiceName] = useState(DependencyType.MySQL);
   const [key, setKey] = useState(action.payload.key || "");
   const [value, setValue] = useState(action.payload.value || "");
   const [trackGenerate, setTrackGenerate] = useState(false);
 
+  const handleUpdateServiceName = (dependencyType: DependencyType) => {
+    setServiceName(dependencyType);
+    onChange.updateActions(
+      "payload.serviceName",
+      dependencyType,
+      location.concat(index)
+    );
+  };
+
   const handleChangeServiceName = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setServiceName(event.target.value as DependencyType);
+    handleUpdateServiceName(event.target.value as DependencyType);
   };
 
   const handleChangeKey = (
@@ -211,11 +204,7 @@ export function InteractiveBlock(params: InteractiveBlockParams) {
       return;
     }
     if (!action.payload.serviceName) {
-      onChange.updateActions(
-        "payload.serviceName",
-        serviceName,
-        location.concat(index)
-      );
+      handleUpdateServiceName(serviceName);
     }
   }, [action.action]);
 
@@ -293,13 +282,6 @@ export function InteractiveBlock(params: InteractiveBlockParams) {
               variant="filled"
               value={serviceName}
               onChange={handleChangeServiceName}
-              onBlur={() =>
-                onChange.updateActions(
-                  "payload.serviceName",
-                  serviceName,
-                  location.concat(index)
-                )
-              }
               onFocus={() => onChange.setActiveDepth(currentDepth)}
               style={{ marginTop: 11 }}
             >
@@ -335,13 +317,6 @@ export function InteractiveBlock(params: InteractiveBlockParams) {
               variant="filled"
               value={serviceName}
               onChange={handleChangeServiceName}
-              onBlur={() =>
-                onChange.updateActions(
-                  "payload.serviceName",
-                  serviceName,
-                  location.concat(index)
-                )
-              }
               onFocus={() => onChange.setActiveDepth(currentDepth)}
               style={{ marginTop: 11 }}
             >
@@ -388,6 +363,7 @@ export function InteractiveBlock(params: InteractiveBlockParams) {
           <InteractiveBuilder
             message={message}
             actions={action.payload.actions || []}
+            callee={action.payload.serviceName}
             location={location.concat(index)}
             activeDepth={activeDepth}
             currentDepth={currentDepth + 1}
@@ -400,3 +376,21 @@ export function InteractiveBlock(params: InteractiveBlockParams) {
     </Box>
   );
 }
+
+// const findCallee = (
+//   message: Message,
+//   actions: Action[],
+//   location: number[]
+// ): string => {
+//   if (!location.length) {
+//     return message.meta.callee;
+//   }
+//   if (location.length === 1) {
+//     return actions[location[0]]?.payload?.serviceName || "";
+//   }
+//   return findCallee(
+//     message,
+//     actions[location[0]]?.payload?.actions || [],
+//     location.slice(1)
+//   );
+// };
