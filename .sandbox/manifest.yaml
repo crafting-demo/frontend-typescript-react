@@ -5,7 +5,7 @@ hooks:
     cmd: yarn build
 
 daemons:
-  app:
+  typescript-react:
     run:
       cmd: yarn start
       env:
