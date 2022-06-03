@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Send as SendIcon } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
@@ -15,15 +15,16 @@ import {
 import { Client } from "backend";
 import { emptyMessage, RandomMessageChained } from "common/helpers";
 import { useMobile, useResponse } from "common/hooks";
-import { Action } from "common/types";
+import { Action, Message, ServiceType } from "common/types";
 import { InteractiveBuilder } from "components/message/interactive";
-import { Producer } from "kafka";
+import { Consumer, Producer } from "kafka";
 import { logger } from "logger";
 
 export function MessageBuilder() {
   const mobile = useMobile();
   const [message, setMessage] = useState(emptyMessage());
   const [, setResponse] = useResponse();
+  const [kafkaResponse, setKafkaResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(-1);
   const [generate, setGenerate] = useState(false);
@@ -62,6 +63,10 @@ export function MessageBuilder() {
     setActive(depth);
   };
 
+  const handleChangeKafkaResponse = (resp: string) => {
+    setKafkaResponse(resp);
+  };
+
   const handleGenerate = () => {
     setMessage(RandomMessageChained());
     setGenerate(!generate);
@@ -69,6 +74,7 @@ export function MessageBuilder() {
 
   const handleClear = () => {
     setMessage(emptyMessage());
+    setRequestMode("API");
     setClear(!clear);
   };
 
@@ -102,7 +108,6 @@ export function MessageBuilder() {
         actions: message.actions,
       })
     );
-    setLoading(false);
   };
 
   const handleSend = () => {
@@ -114,6 +119,29 @@ export function MessageBuilder() {
       handleSendKafka();
     }
   };
+
+  useEffect(() => {
+    const consumer = new Consumer(
+      ServiceType.React,
+      handleChangeKafkaResponse,
+      undefined,
+      "latest"
+    );
+    consumer.start();
+  }, []);
+
+  useEffect(() => {
+    if (!kafkaResponse) {
+      return;
+    }
+    try {
+      const parsed = JSON.parse(kafkaResponse) as Message;
+      setResponse(parsed);
+      setLoading(false);
+    } catch (e) {
+      logger.Write(e);
+    }
+  }, [kafkaResponse]);
 
   return (
     <>
