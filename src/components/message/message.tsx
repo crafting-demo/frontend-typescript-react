@@ -93,7 +93,15 @@ export function MessageBuilder() {
 
   const handleSendKafka = async () => {
     const client = new Producer(message.meta.callee);
-    client.send(JSON.stringify(message));
+    client.send(
+      JSON.stringify({
+        meta: {
+          ...message.meta,
+          callTime: new Date().toISOString(),
+        },
+        actions: message.actions,
+      })
+    );
     setLoading(false);
   };
 
