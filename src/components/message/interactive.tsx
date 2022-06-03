@@ -95,7 +95,11 @@ export function InteractiveBuilder({
           style={{ marginTop: 11 }}
         >
           {Object.values(ServiceType)
-            .filter((value) => value !== ServiceType.React)
+            .filter((value) =>
+              currentDepth === 0
+                ? value === ServiceType.Gin
+                : value !== ServiceType.React
+            )
             .map((value) => (
               <MenuItem key={value} value={value}>
                 {value}

@@ -2,13 +2,22 @@ import { useState } from "react";
 
 import { Send as SendIcon } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { Button, Box } from "@mui/material";
+import {
+  Button,
+  Box,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
 
 import { Client } from "backend";
 import { emptyMessage, RandomMessageChained } from "common/helpers";
 import { useMobile, useResponse } from "common/hooks";
 import { Action } from "common/types";
 import { InteractiveBuilder } from "components/message/interactive";
+import { Producer } from "kafka";
 import { logger } from "logger";
 
 export function MessageBuilder() {
@@ -19,6 +28,7 @@ export function MessageBuilder() {
   const [active, setActive] = useState(-1);
   const [generate, setGenerate] = useState(false);
   const [clear, setClear] = useState(false);
+  const [requestMode, setRequestMode] = useState("API");
 
   const handleChangeCallee = (value: string) => {
     setMessage({
@@ -62,9 +72,11 @@ export function MessageBuilder() {
     setClear(!clear);
   };
 
-  const handleSend = async () => {
-    setLoading(true);
+  const handleSetRequestMode = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRequestMode((event.target as HTMLInputElement).value);
+  };
 
+  const handleSendApi = async () => {
     const client = new Client(message.meta.callee);
     const resp = await client.makeServiceCall({
       meta: {
@@ -76,6 +88,22 @@ export function MessageBuilder() {
     if (resp) {
       setLoading(false);
       setResponse(resp);
+    }
+  };
+
+  const handleSendKafka = async () => {
+    const client = new Producer(message.meta.callee);
+    client.send(JSON.stringify(message));
+    setLoading(false);
+  };
+
+  const handleSend = () => {
+    setLoading(true);
+    if (requestMode === "API") {
+      handleSendApi();
+    }
+    if (requestMode === "KAFKA") {
+      handleSendKafka();
     }
   };
 
@@ -109,6 +137,22 @@ export function MessageBuilder() {
           Send
         </LoadingButton>
       </Box>
+
+      <FormControl sx={{ marginBottom: "20px" }}>
+        <FormLabel>Select Request Mode:</FormLabel>
+        <RadioGroup row value={requestMode} onChange={handleSetRequestMode}>
+          <FormControlLabel
+            value="API"
+            control={<Radio size="small" />}
+            label="Rest (HTTP)"
+          />
+          <FormControlLabel
+            value="KAFKA"
+            control={<Radio size="small" />}
+            label="Kafka (TCP)"
+          />
+        </RadioGroup>
+      </FormControl>
 
       <InteractiveBuilder
         message={message}

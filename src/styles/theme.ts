@@ -26,6 +26,7 @@ export const theme = createTheme({
           boxShadow: "none",
           border: `1px solid ${colors.white[200]}`,
           backgroundColor: colors.white[100],
+          marginTop: "3px",
         },
       },
     },
