@@ -1,24 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Send as SendIcon } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { Button, Box } from "@mui/material";
+import {
+  Button,
+  Box,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
 
 import { Client } from "backend";
 import { emptyMessage, RandomMessageChained } from "common/helpers";
 import { useMobile, useResponse } from "common/hooks";
-import { Action } from "common/types";
+import { Action, Message, ServiceType } from "common/types";
 import { InteractiveBuilder } from "components/message/interactive";
+import { Consumer, Producer } from "kafka";
 import { logger } from "logger";
 
 export function MessageBuilder() {
   const mobile = useMobile();
   const [message, setMessage] = useState(emptyMessage());
   const [, setResponse] = useResponse();
+  const [kafkaResponse, setKafkaResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(-1);
   const [generate, setGenerate] = useState(false);
   const [clear, setClear] = useState(false);
+  const [requestMode, setRequestMode] = useState("API");
 
   const handleChangeCallee = (value: string) => {
     setMessage({
@@ -52,6 +63,10 @@ export function MessageBuilder() {
     setActive(depth);
   };
 
+  const handleChangeKafkaResponse = (resp: string) => {
+    setKafkaResponse(resp);
+  };
+
   const handleGenerate = () => {
     setMessage(RandomMessageChained());
     setGenerate(!generate);
@@ -59,12 +74,15 @@ export function MessageBuilder() {
 
   const handleClear = () => {
     setMessage(emptyMessage());
+    setRequestMode("API");
     setClear(!clear);
   };
 
-  const handleSend = async () => {
-    setLoading(true);
+  const handleSetRequestMode = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRequestMode((event.target as HTMLInputElement).value);
+  };
 
+  const handleSendApi = async () => {
     const client = new Client(message.meta.callee);
     const resp = await client.makeServiceCall({
       meta: {
@@ -78,6 +96,52 @@ export function MessageBuilder() {
       setResponse(resp);
     }
   };
+
+  const handleSendKafka = async () => {
+    const client = new Producer(message.meta.callee);
+    client.send(
+      JSON.stringify({
+        meta: {
+          ...message.meta,
+          callTime: new Date().toISOString(),
+        },
+        actions: message.actions,
+      })
+    );
+  };
+
+  const handleSend = () => {
+    setLoading(true);
+    if (requestMode === "API") {
+      handleSendApi();
+    }
+    if (requestMode === "KAFKA") {
+      handleSendKafka();
+    }
+  };
+
+  useEffect(() => {
+    const consumer = new Consumer(
+      ServiceType.React,
+      handleChangeKafkaResponse,
+      undefined,
+      "latest"
+    );
+    consumer.start();
+  }, []);
+
+  useEffect(() => {
+    if (!kafkaResponse) {
+      return;
+    }
+    try {
+      const parsed = JSON.parse(kafkaResponse) as Message;
+      setResponse(parsed);
+      setLoading(false);
+    } catch (e) {
+      logger.Write(e);
+    }
+  }, [kafkaResponse]);
 
   return (
     <>
@@ -109,6 +173,22 @@ export function MessageBuilder() {
           Send
         </LoadingButton>
       </Box>
+
+      <FormControl sx={{ marginBottom: "20px" }}>
+        <FormLabel>Select Request Mode:</FormLabel>
+        <RadioGroup row value={requestMode} onChange={handleSetRequestMode}>
+          <FormControlLabel
+            value="API"
+            control={<Radio size="small" />}
+            label="Rest (HTTP)"
+          />
+          <FormControlLabel
+            value="KAFKA"
+            control={<Radio size="small" />}
+            label="Kafka (TCP)"
+          />
+        </RadioGroup>
+      </FormControl>
 
       <InteractiveBuilder
         message={message}
