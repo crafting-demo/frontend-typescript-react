@@ -1,8 +1,6 @@
 hooks:
   post-checkout:
     cmd: yarn
-  build:
-    cmd:
 
 daemons:
   typescript-react:
