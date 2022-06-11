@@ -1,5 +1,5 @@
 hooks:
-  post-checkout:
+  build:
     cmd: yarn
 
 daemons:
