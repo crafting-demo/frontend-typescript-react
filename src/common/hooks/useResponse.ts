@@ -1,9 +1,9 @@
 import { useContext } from "react";
 
-import { Message } from "common/types";
+import { ResponseMessage } from "common/types";
 import { ResponseContext } from "components/response/provider";
 
 export const useResponse = () =>
-  useContext<[Message, React.Dispatch<React.SetStateAction<Message>>]>(
-    ResponseContext
-  );
+  useContext<
+    [ResponseMessage, React.Dispatch<React.SetStateAction<ResponseMessage>>]
+  >(ResponseContext);

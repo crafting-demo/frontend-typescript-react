@@ -1,52 +1,28 @@
-export enum ActionType {
-  Echo = "Echo",
-  Read = "Read",
-  Write = "Write",
-  Call = "Call",
+export enum MessageType {
+  Hello = "Hello! How are you?",
+  Echo = "Please echo",
+  Read = "Read from database",
+  Write = "Write to database",
 }
 
-export enum StatusType {
-  Passed = "Passed",
-  Failed = "Failed",
+export enum BackendType {
+  Gin = "Gin",
+  Rails = "Rails",
+  Spring = "Spring",
+  Django = "Django",
+  GinKafka = "GinKafka",
 }
 
-export enum ServiceType {
-  React = "frontend-typescript-react",
-  Gin = "backend-go-gin",
-  Express = "backend-typescript-express",
-  Rails = "backend-ruby-rails",
-  Spring = "backend-kotlin-spring",
-  Django = "backend-python-django",
-}
-
-export enum DependencyType {
-  MySQL = "mysql",
-  MongoDB = "mongodb",
-}
-
-export interface Message {
-  meta: Meta;
-  actions: Action[];
-}
-
-export interface Meta {
-  caller: string;
-  callee: string;
-  callTime?: string;
-  returnTime?: string;
-}
-
-export interface Action {
-  serviceName?: string;
-  action: string;
-  payload: Payload;
-  status?: string;
-  returnTime?: string;
-}
-
-export interface Payload {
-  serviceName?: string;
-  actions?: Action[];
+export interface RequestMessage {
+  callTime: string;
+  target: BackendType;
+  message: MessageType;
   key?: string;
   value?: string;
+}
+
+export interface ResponseMessage {
+  receivedTime: string;
+  returnTime: string;
+  message: string;
 }
