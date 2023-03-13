@@ -2,7 +2,7 @@ import { RequestMessage, ResponseMessage } from "common/types";
 import { logger } from "logger";
 
 export class Client {
-  public async makeServiceCall(
+  public static async makeServiceCall(
     message: RequestMessage
   ): Promise<ResponseMessage | null> {
     const resp = await fetch(

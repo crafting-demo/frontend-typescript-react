@@ -1,29 +1,32 @@
+import { useState } from "react";
+
 import { CssBaseline } from "@mui/material";
 
-import { useMobile } from "common/hooks";
-import {
-  AppContainer,
-  AppWrapperMessage,
-  AppWrapperResponse,
-} from "components/common";
+import { MessageType, BackendType } from "common";
+import { AppContainer } from "components/common";
+import { Diagram } from "components/diagram";
 import { MessageBuilder } from "components/message";
 import { ResponseBuilder } from "components/response";
 
 export function App() {
-  const mobile = useMobile();
+  const [messageType, setMessageType] = useState(MessageType.Hello);
+  const [backendType, setBackendType] = useState(BackendType.Gin);
 
   return (
     <>
       <CssBaseline />
 
-      <AppContainer mobile={+mobile}>
-        <AppWrapperMessage mobile={+mobile}>
-          <MessageBuilder />
-        </AppWrapperMessage>
+      <AppContainer>
+        <Diagram
+          {...{ messageType, backendType }}
+          sx={{ maxWidth: "750px", marginBottom: "12px" }}
+        />
 
-        <AppWrapperResponse mobile={+mobile}>
-          <ResponseBuilder />
-        </AppWrapperResponse>
+        <MessageBuilder
+          {...{ messageType, setMessageType, backendType, setBackendType }}
+        />
+
+        <ResponseBuilder />
       </AppContainer>
     </>
   );

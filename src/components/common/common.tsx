@@ -2,34 +2,15 @@ import { Box, BoxProps, styled } from "@mui/material";
 
 import { colors } from "styles";
 
-export const AppContainer = styled(Box)<BoxProps & { mobile?: number }>(
-  ({ mobile }) => ({
-    display: mobile ? "block" : "flex",
-    "& div": {
-      ...ScrollbarSettings,
-    },
-  })
-);
-
-export const AppWrapperMessage = styled(Box)<BoxProps & { mobile?: number }>(
-  ({ mobile }) => ({
-    overflowY: "scroll",
-    width: mobile ? "100%" : "50%",
-    minHeight: mobile ? "50vh" : "100vh",
-    height: mobile ? "auto" : "100vh",
-    padding: "20px",
-  })
-);
-
-export const AppWrapperResponse = styled(Box)<BoxProps & { mobile?: number }>(
-  ({ mobile }) => ({
-    overflowY: "scroll",
-    width: mobile ? "100%" : "50%",
-    minHeight: mobile ? "50vh" : "100vh",
-    height: mobile ? "auto" : "100vh",
-    padding: "20px",
-  })
-);
+export const AppContainer = styled(Box)<BoxProps>(() => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  padding: "12px",
+  "& div": {
+    ...ScrollbarSettings,
+  },
+}));
 
 export const ScrollbarSettings = {
   "::-webkit-scrollbar": {

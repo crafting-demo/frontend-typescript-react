@@ -44,3 +44,15 @@ export const InteractiveBlockWrapper = styled(Box)(() => ({
   display: "block",
   borderLeft: `3px solid ${colors.silver[100]}`,
 }));
+
+export const SubFieldWrapper = styled(Box)(
+  ({ expanded, mobile }: { expanded: boolean; mobile: number }) => ({
+    display: expanded ? "flex" : "none",
+    overflow: expanded ? "auto" : "hidden",
+    maxHeight: expanded ? "100vh" : 0,
+    transition: "max-height 1s ease-in-out",
+    flexDirection: "column",
+    gap: "8px",
+    paddingLeft: mobile ? 0 : "28px",
+  })
+);
