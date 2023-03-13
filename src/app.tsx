@@ -10,7 +10,7 @@ import { ResponseBuilder } from "components/response";
 
 export function App() {
   const [messageType, setMessageType] = useState(MessageType.Hello);
-  const [backendType, setBackendType] = useState(BackendType.Gin);
+  const [backendType, setBackendType] = useState(BackendType.Rails);
 
   return (
     <>
