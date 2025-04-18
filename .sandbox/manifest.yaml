@@ -7,7 +7,4 @@ daemons:
     run:
       cmd: yarn start
       env:
-        - HOST=0.0.0.0
-        - PORT=$REACT_SERVICE_PORT
         - REACT_APP_DNS_SUFFIX=$SANDBOX_ENDPOINT_DNS_SUFFIX
-        - WDS_SOCKET_PORT=443
